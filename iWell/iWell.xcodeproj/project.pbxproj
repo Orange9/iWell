@@ -15,8 +15,6 @@
 		B43D74D01574F02700F584A4 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B43D74CF1574F02700F584A4 /* SenTestingKit.framework */; };
 		B43D74D11574F02700F584A4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B43D74B71574F02500F584A4 /* UIKit.framework */; };
 		B43D74D21574F02700F584A4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B43D74B91574F02500F584A4 /* Foundation.framework */; };
-		B43D74DA1574F02800F584A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B43D74D81574F02800F584A4 /* InfoPlist.strings */; };
-		B43D74DD1574F02A00F584A4 /* iWellTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B43D74DC1574F02A00F584A4 /* iWellTests.m */; };
 		B43D74ED1574F07A00F584A4 /* BBSCore.m in Sources */ = {isa = PBXBuildFile; fileRef = B43D74E81574F07A00F584A4 /* BBSCore.m */; };
 		B43D74EE1574F07A00F584A4 /* Core.m in Sources */ = {isa = PBXBuildFile; fileRef = B43D74EA1574F07A00F584A4 /* Core.m */; };
 		B43D74EF1574F07A00F584A4 /* NetCore.m in Sources */ = {isa = PBXBuildFile; fileRef = B43D74EC1574F07A00F584A4 /* NetCore.m */; };
@@ -71,10 +69,6 @@
 		B43D74C51574F02700F584A4 /* iWell-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iWell-Prefix.pch"; sourceTree = "<group>"; };
 		B43D74CE1574F02700F584A4 /* iWellTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iWellTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B43D74CF1574F02700F584A4 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		B43D74D71574F02800F584A4 /* iWellTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iWellTests-Info.plist"; sourceTree = "<group>"; };
-		B43D74D91574F02800F584A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		B43D74DB1574F02900F584A4 /* iWellTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iWellTests.h; sourceTree = "<group>"; };
-		B43D74DC1574F02A00F584A4 /* iWellTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iWellTests.m; sourceTree = "<group>"; };
 		B43D74E71574F07A00F584A4 /* BBSCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBSCore.h; sourceTree = "<group>"; };
 		B43D74E81574F07A00F584A4 /* BBSCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBSCore.m; sourceTree = "<group>"; };
 		B43D74E91574F07A00F584A4 /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
@@ -160,7 +154,6 @@
 			isa = PBXGroup;
 			children = (
 				B43D74BD1574F02500F584A4 /* iWell */,
-				B43D74D51574F02700F584A4 /* iWellTests */,
 				B43D74B61574F02500F584A4 /* Frameworks */,
 				B43D74B41574F02500F584A4 /* Products */,
 			);
@@ -221,25 +214,6 @@
 				B43D74C01574F02600F584A4 /* InfoPlist.strings */,
 				B43D74C31574F02600F584A4 /* main.m */,
 				B43D74C51574F02700F584A4 /* iWell-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		B43D74D51574F02700F584A4 /* iWellTests */ = {
-			isa = PBXGroup;
-			children = (
-				B43D74DB1574F02900F584A4 /* iWellTests.h */,
-				B43D74DC1574F02A00F584A4 /* iWellTests.m */,
-				B43D74D61574F02800F584A4 /* Supporting Files */,
-			);
-			path = iWellTests;
-			sourceTree = "<group>";
-		};
-		B43D74D61574F02800F584A4 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				B43D74D71574F02800F584A4 /* iWellTests-Info.plist */,
-				B43D74D81574F02800F584A4 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -387,7 +361,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B43D74DA1574F02800F584A4 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,7 +416,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B43D74DD1574F02A00F584A4 /* iWellTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,14 +434,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				B43D74C11574F02600F584A4 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		B43D74D81574F02800F584A4 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B43D74D91574F02800F584A4 /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
