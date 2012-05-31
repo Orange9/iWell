@@ -184,11 +184,6 @@
 		B43D74BD1574F02500F584A4 /* iWell */ = {
 			isa = PBXGroup;
 			children = (
-				B43D752D1574F14000F584A4 /* DetailViewController_iPad.xib */,
-				B43D752F1574F14000F584A4 /* DetailViewController_iPhone.xib */,
-				B43D75311574F14000F584A4 /* LoginViewController.xib */,
-				B43D75331574F14000F584A4 /* MasterViewController_iPad.xib */,
-				B43D75351574F14000F584A4 /* MasterViewController_iPhone.xib */,
 				B43D751D1574F0C100F584A4 /* AppDelegate.h */,
 				B43D751E1574F0C100F584A4 /* AppDelegate.m */,
 				B43D751F1574F0C100F584A4 /* DetailViewController.h */,
@@ -197,6 +192,11 @@
 				B43D75221574F0C100F584A4 /* LoginViewController.m */,
 				B43D75231574F0C100F584A4 /* MasterViewController.h */,
 				B43D75241574F0C100F584A4 /* MasterViewController.m */,
+				B43D752D1574F14000F584A4 /* DetailViewController_iPad.xib */,
+				B43D752F1574F14000F584A4 /* DetailViewController_iPhone.xib */,
+				B43D75311574F14000F584A4 /* LoginViewController.xib */,
+				B43D75331574F14000F584A4 /* MasterViewController_iPad.xib */,
+				B43D75351574F14000F584A4 /* MasterViewController_iPhone.xib */,
 				B43D74F01574F09200F584A4 /* Utils */,
 				B43D74E61574F07A00F584A4 /* Core */,
 				B43D74BE1574F02600F584A4 /* Supporting Files */,
@@ -667,6 +667,7 @@
 				B43D74E21574F02A00F584A4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B43D74E31574F02A00F584A4 /* Build configuration list for PBXNativeTarget "iWellTests" */ = {
 			isa = XCConfigurationList;
@@ -675,6 +676,7 @@
 				B43D74E51574F02A00F584A4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

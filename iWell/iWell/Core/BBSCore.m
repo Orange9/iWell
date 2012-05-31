@@ -86,14 +86,14 @@ static NSString *reqString = @"iWell_Req";
 {
 	if (self.stage != BBS_ONLINE) return;
 	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
-	[data setValue:[NSNumber numberWithInteger:BBS_BOARDS_LIST] forKey:reqString];
+	[data setValue:[NSNumber numberWithUnsignedInteger:BBS_BOARDS_LIST] forKey:reqString];
 	[data setValue:self.sessionToken forKey:@"session"];
 	if (range.location > 0) {
-		[data setValue:[NSString stringWithFormat:@"%u",range.location] forKey:@"start"]; //optional
+		[data setValue:[NSNumber numberWithUnsignedInteger:range.location] forKey:@"start"]; //optional
 	}
 	//	[data setValue:@"100" forKey:@"end"]; //optional
 	if (range.length > 0) {
-		[data setValue:[NSString stringWithFormat:@"%u", range.length] forKey:@"count"]; //optional
+		[data setValue:[NSNumber numberWithUnsignedInteger:range.length] forKey:@"count"]; //optional
 	}
 	[self.condition lock];
 	[self.reqQueue addObject:data];
@@ -105,14 +105,14 @@ static NSString *reqString = @"iWell_Req";
 {
 	if (self.stage != BBS_ONLINE) return;
 	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
-	[data setValue:[NSNumber numberWithInteger:BBS_FAVBOARDS_LIST] forKey:reqString];
+	[data setValue:[NSNumber numberWithUnsignedInteger:BBS_FAVBOARDS_LIST] forKey:reqString];
 	[data setValue:self.sessionToken forKey:@"session"];
 	if (range.location > 0) {
-		[data setValue:[NSString stringWithFormat:@"%u", range.location] forKey:@"start"]; //optional
+		[data setValue:[NSNumber numberWithUnsignedInteger:range.location] forKey:@"start"]; //optional
 	}
 	//	[data setValue:@"100" forKey:@"end"]; //optional
 	if (range.length > 0) {
-		[data setValue:[NSString stringWithFormat:@"%u",range.length] forKey:@"count"]; //optional
+		[data setValue:[NSNumber numberWithUnsignedInteger:range.length] forKey:@"count"]; //optional
 	}
 	[self.condition lock];
 	[self.reqQueue addObject:data];
@@ -124,18 +124,16 @@ static NSString *reqString = @"iWell_Req";
 {
 	if (self.stage != BBS_ONLINE) return;
 	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
-	[data setValue:[NSNumber numberWithInteger:BBS_POSTS_LIST] forKey:reqString];
+	[data setValue:[NSNumber numberWithUnsignedInteger:BBS_POSTS_LIST] forKey:reqString];
 	[data setValue:self.sessionToken forKey:@"session"];
 	[data setValue:board forKey:@"name"];
 	[data setValue:@"normal" forKey:@"mode"]; //optional, normal/digest/mark/deleted/junk
 	if (range.location > 0) {
-		[data setValue:[NSString stringWithFormat:@"%u", range.location] forKey:@"start"]; //optional
+		[data setValue:[NSNumber numberWithUnsignedInteger:range.location] forKey:@"start"]; //optional
 	}
 	//	[data setValue:@"100" forKey:@"end"]; //optional
 	if (range.length > 0) {
-		[data setValue:[NSString stringWithFormat:@"%u", range.length] forKey:@"count"]; //optional
-	} else {
-		[data setValue:@"10" forKey:@"count"]; //optional
+		[data setValue:[NSNumber numberWithUnsignedInteger:range.length] forKey:@"count"]; //optional
 	}
 	[self.condition lock];
 	[self.reqQueue addObject:data];
@@ -147,9 +145,9 @@ static NSString *reqString = @"iWell_Req";
 {
 	if (self.stage != BBS_ONLINE) return;
 	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
-	[data setValue:[NSNumber numberWithInteger:BBS_CONTENT_VIEW] forKey:reqString];
+	[data setValue:[NSNumber numberWithUnsignedInteger:BBS_CONTENT_VIEW] forKey:reqString];
 	[data setValue:self.sessionToken forKey:@"session"];
-	[data setValue:[NSString stringWithFormat:@"%u", postid] forKey:@"id"];
+	[data setValue:[NSNumber numberWithUnsignedInteger:postid] forKey:@"id"];
 	[data setValue:board forKey:@"board"];
 	[self.condition lock];
 	[self.reqQueue addObject:data];
@@ -223,9 +221,9 @@ static NSString *reqString = @"iWell_Req";
 						} else if (req == BBS_CONTENT_VIEW) {
 							array = [NSArray arrayWithObjects:reqNumber, [packedData valueForKey:@"board"], [packedData valueForKey:@"id"], nil];
 						} else break;
-						NSUInteger index = [self.netCore get:[NSURL URLWithString:reqPath[req] relativeToURL:self.baseURL] Data:packedData];
+						NSNumber *index = [self.netCore get:[NSURL URLWithString:reqPath[req] relativeToURL:self.baseURL] Data:packedData];
 						[self.condition lock];
-						[self.reqMap setObject:array forKey:[NSNumber numberWithUnsignedInteger:index]];
+						[self.reqMap setObject:array forKey:index];
 						[self.reqQueue removeObjectAtIndex:0];
 						[self.condition unlock];
 					}
@@ -242,7 +240,7 @@ static NSString *reqString = @"iWell_Req";
 
 #pragma mark - Delegate Methods
 
-- (void)recv:(NSData *)data Error:(NSError *)error Index:(NSUInteger)index
+- (void)recv:(NSData *)data Error:(NSError *)error Index:(NSNumber *)index
 {
 	if (data == nil) {
 		// something bad happens
@@ -290,12 +288,11 @@ static NSString *reqString = @"iWell_Req";
 			}
 			case BBS_ONLINE:
 			{
-				NSNumber *indexNumber = [NSNumber numberWithUnsignedInteger:index];
-				NSArray *reqInfo = [self.reqMap objectForKey:indexNumber];
+				NSArray *reqInfo = [self.reqMap objectForKey:index];
 				NSNumber *reqNumber = [reqInfo objectAtIndex:0];
 				enum bbs_req_t req = [reqNumber unsignedIntegerValue];
 				[self.condition lock];
-				[self.reqMap removeObjectForKey:indexNumber];
+				[self.reqMap removeObjectForKey:index];
 				[self.condition unlock];
 				switch (req) {
 					case BBS_BOARDS_LIST:
@@ -345,10 +342,10 @@ static NSString *reqString = @"iWell_Req";
 					{
 						// {"picattach": [{"name": <string: Attachment filename>, "offset:": <int: Attachment offset in post>}, {...}...], "title": <string: Post title>, "content": <string: Post content>, "otherattach": [{...}...], "owner": <string: Poster>, "id": <int: Post ID>}
 						NSString *board = [reqInfo objectAtIndex:1];
-						NSString *postid = [reqInfo objectAtIndex:2];
+						NSNumber *postid = [reqInfo objectAtIndex:2];
 						id dict = [self.parser objectWithData:data];
 						if ([dict isKindOfClass:[NSDictionary class]]) {
-							[self.delegate showContent:dict inBoard:board withID:[postid integerValue]];
+							[self.delegate showContent:dict inBoard:board withID:[postid unsignedIntegerValue]];
 							return;
 						}
 						[self.delegate printContent:@"DATA CORRUPTED"];

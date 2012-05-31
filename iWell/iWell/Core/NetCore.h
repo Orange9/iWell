@@ -10,7 +10,7 @@
 
 @protocol NetCoreDelegate <NSObject>
 
-- (void)recv:(NSData *)data Error:(NSError *)error Index:(NSUInteger)index;
+- (void)recv:(NSData *)data Error:(NSError *)error Index:(NSNumber *)index;
 
 @end
 
@@ -22,7 +22,7 @@
 
 - (id)initWithDelegate:(id<NetCoreDelegate>)delegate;
 
-- (NSUInteger)get:(NSURL *)url Data:(NSDictionary *)data;
-- (NSUInteger)post:(NSURL *)url Data:(NSDictionary *)data;
+- (NSNumber *)get:(NSURL *)url Data:(NSDictionary *)data;
+- (NSNumber *)post:(NSURL *)url Data:(NSDictionary *)data;
 
 @end

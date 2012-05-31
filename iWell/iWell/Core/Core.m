@@ -148,12 +148,12 @@
 	NSDictionary *dict = [posts objectAtIndex:index];
 	NSNumber *postid = [dict objectForKey:@"id"];
 	if (postid == nil) {
-		return -1;
+		return 0;
 	}
 	[dict setValue:[NSNumber numberWithBool:YES] forKey:@"read"];
 	[posts replaceObjectAtIndex:index withObject:dict];
 	self.index = index;
-	return [postid integerValue];
+	return [postid unsignedIntegerValue];
 }
 
 - (NSUInteger)boardsCount
@@ -202,7 +202,7 @@
 		if (postid == nil) {
 			return;
 		}
-		NSUInteger index = [postid integerValue] + 1;
+		NSUInteger index = [postid unsignedIntegerValue] + 1;
 		[self.bbsCore listPostsInRange:NSMakeRange(index, 20) onBoard:board];
 	}
 }
@@ -216,7 +216,7 @@
 		if (postid == nil) {
 			return;
 		}
-		NSUInteger index = [postid integerValue];
+		NSUInteger index = [postid unsignedIntegerValue];
 		if (index > 20) {
 			index -= 20;
 		} else {
@@ -235,7 +235,7 @@
 
 - (void)viewContentOfNewerPost {
 	if (self.index <= 0) return;
-	NSUInteger postid = [self postIDAtIndex:self.index - 1 onBoard:self.board];
+	NSUInteger postid = [self postIDAtIndex:(NSUInteger)self.index - 1 onBoard:self.board];
 	[self viewContentOfPost:postid onBoard:self.board];
 	MasterViewController *postsViewController = [self.postsOutputs objectForKey:self.board];
 	NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.index inSection:1];
@@ -243,8 +243,8 @@
 }
 
 - (void)viewContentOfOlderPost {
-	if (self.index >= [self postsCountOnBoard:self.board] - 1) return;
-	NSUInteger postid = [self postIDAtIndex:self.index + 1 onBoard:self.board];
+	if (self.index >= (NSInteger)[self postsCountOnBoard:self.board] - 1) return;
+	NSUInteger postid = [self postIDAtIndex:(NSUInteger)self.index + 1 onBoard:self.board];
 	[self viewContentOfPost:postid onBoard:self.board];
 	MasterViewController *postsViewController = [self.postsOutputs objectForKey:self.board];
 	NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.index inSection:1];
@@ -350,14 +350,14 @@
 	if (postid == nil) {
 		return;
 	}
-	importstart = [postid integerValue];
+	importstart = [postid unsignedIntegerValue];
 	
 	dict = [posts lastObject];
 	postid = [dict objectForKey:@"id"];
 	if (postid == nil) {
 		return;
 	}
-	importend = [postid integerValue];
+	importend = [postid unsignedIntegerValue];
 	
 	if ([list count] != 0) {
 		dict = [list lastObject];
@@ -365,40 +365,40 @@
 		if (postid == nil) {
 			return;
 		}
-		start = [postid integerValue];
+		start = [postid unsignedIntegerValue];
 		
 		dict = [list objectAtIndex:0];
 		postid = [dict objectForKey:@"id"];
 		if (postid == nil) {
 			return;
 		}
-		end = [postid integerValue];
+		end = [postid unsignedIntegerValue];
 	} else {
 		start = importend + 1;
 		end = importend;
 	}
 	if (importstart > end) {
 		NSEnumerator *e = [posts objectEnumerator];
-		for (NSDictionary *dict in e) {
-			NSNumber *postid = [dict objectForKey:@"id"];
-			if (postid == nil) {
+		for (NSDictionary *d in e) {
+			NSNumber *pid = [d objectForKey:@"id"];
+			if (pid == nil) {
 				return;
 			}
-			if ([postid integerValue] == end + 1) {
-				[list insertObject:dict atIndex:0];
+			if ([pid unsignedIntegerValue] == end + 1) {
+				[list insertObject:d atIndex:0];
 				end++;
 				self.index = self.index + 1;
 			}
 		}
 	} else {
 		NSEnumerator *e = [posts reverseObjectEnumerator];
-		for (NSDictionary *dict in e) {
-			NSNumber *postid = [dict objectForKey:@"id"];
-			if (postid == nil) {
+		for (NSDictionary *d in e) {
+			NSNumber *pid = [d objectForKey:@"id"];
+			if (pid == nil) {
 				return;
 			}
-			if ([postid integerValue] == start - 1) {
-				[list addObject:dict];
+			if ([pid unsignedIntegerValue] == start - 1) {
+				[list addObject:d];
 				start--;
 			}
 		}

@@ -17,7 +17,7 @@ enum http_method_t {
 static NSString *methodString[] = { @"GET", @"POST" };
 
 @interface Connection : NSURLConnection
-@property (assign, nonatomic) NSUInteger index;
+@property (strong, nonatomic) NSNumber *index;
 @end
 
 @implementation Connection
@@ -29,7 +29,7 @@ static NSString *methodString[] = { @"GET", @"POST" };
 @property (strong, nonatomic) NSRunLoop *loop;
 @property (assign, nonatomic) NSUInteger nextid;
 
-- (NSUInteger)request:(NSURL *)url Data:(NSDictionary *)data Method:(enum http_method_t)methode;
+- (NSNumber *)request:(NSURL *)url Data:(NSDictionary *)data Method:(enum http_method_t)methode;
 - (NSString *)encode:(NSString *)value;
 - (void)run;
 @end
@@ -52,22 +52,22 @@ static NSString *methodString[] = { @"GET", @"POST" };
 	return self;
 }
 
-- (NSUInteger)get:(NSURL *)url Data:(NSDictionary *)data
+- (NSNumber *)get:(NSURL *)url Data:(NSDictionary *)data
 {
 	return [self request:url Data:data Method:HTTP_GET];
 }
 
-- (NSUInteger)post:(NSURL *)url Data:(NSDictionary *)data
+- (NSNumber *)post:(NSURL *)url Data:(NSDictionary *)data
 {
 	return [self request:url Data:data Method:HTTP_POST];
 }
 
 #pragma mark - Private Methods
 
-- (NSUInteger)request:(NSURL *)url Data:(NSDictionary *)data Method:(enum http_method_t)method
+- (NSNumber *)request:(NSURL *)url Data:(NSDictionary *)data Method:(enum http_method_t)method
 {
 	if (method >= HTTP_METHOD_MAX) {
-		return 0;
+		return nil;
 	}
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
 	[request setHTTPMethod:methodString[method]];
@@ -75,7 +75,7 @@ static NSString *methodString[] = { @"GET", @"POST" };
 	NSEnumerator *e = [data keyEnumerator];
 	if (data != nil) {
 		for (NSString *key in e) {
-			NSString *value = [data objectForKey:key];
+			NSString *value = [NSString stringWithFormat:@"%@", [data objectForKey:key]];
 			[dataString appendFormat:@"%@=%@&", [self encode:key], [self encode:value]];
 		}
 	}
@@ -94,16 +94,15 @@ static NSString *methodString[] = { @"GET", @"POST" };
 	
 	Connection *connection = [[Connection alloc] initWithRequest:request delegate:self startImmediately:NO];
 	if (connection != nil) {
-		connection.index = self.nextid;
+		connection.index = [NSNumber numberWithUnsignedInteger:self.nextid];
 		self.nextid = self.nextid + 1;
 		[connection scheduleInRunLoop:loop forMode:NSDefaultRunLoopMode];
 		[connection start];
-		NSNumber *index = [NSNumber numberWithInteger:connection.index];
-		NSMutableData *data = [NSMutableData data];
-		[self.recvData setObject:data forKey:index];
+		NSMutableData *recvData = [NSMutableData data];
+		[self.recvData setObject:recvData forKey:connection.index];
 		return connection.index;
 	}
-	return 0;
+	return nil;
 }
 
 - (NSString *)encode:(NSString *)value
@@ -125,8 +124,7 @@ static NSString *methodString[] = { @"GET", @"POST" };
 
 - (void)connection:(Connection *)connection didReceiveData:(NSData *)data
 {
-	NSNumber *index = [NSNumber numberWithInteger:connection.index];
-	NSMutableData *recvData = [self.recvData objectForKey:index];
+	NSMutableData *recvData = [self.recvData objectForKey:connection.index];
 	[recvData appendData:data];
 }
 
@@ -137,16 +135,14 @@ static NSString *methodString[] = { @"GET", @"POST" };
 
 - (void)connection:(Connection *)connection didFailWithError:(NSError *)error
 {
-	NSNumber *index = [NSNumber numberWithInteger:connection.index];
-	[self.recvData removeObjectForKey:index];
+	[self.recvData removeObjectForKey:connection.index];
 	[self.delegate recv:nil Error:error Index:connection.index];
 }
 
 - (void)connectionDidFinishLoading:(Connection *)connection {
-	NSNumber *index = [NSNumber numberWithInteger:connection.index];
-	NSMutableData *recvData = [self.recvData objectForKey:index];
+	NSMutableData *recvData = [self.recvData objectForKey:connection.index];
 	[self.delegate recv:recvData Error:nil Index:connection.index];
-	[self.recvData removeObjectForKey:index];
+	[self.recvData removeObjectForKey:connection.index];
 }
 
 - (void)connection:(Connection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge

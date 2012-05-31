@@ -86,10 +86,10 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	if (self.isBoards) {
-		return [self.core boardsCount];
+		return (NSInteger)[self.core boardsCount];
 	} else {
 		if (section == 1) {
-			return [self.core postsCountOnBoard:self.navigationItem.title];
+			return (NSInteger)[self.core postsCountOnBoard:self.navigationItem.title];
 		} else {
 			return 1;
 		}
@@ -118,7 +118,7 @@
 	}
 	if (self.isBoards) {
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		NSDictionary *dict = [self.core boardInfoAtIndex:indexPath.row];
+		NSDictionary *dict = [self.core boardInfoAtIndex:(NSUInteger)indexPath.row];
 		cell.textLabel.text = [dict objectForKey:@"name"];
 		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  %@", [dict objectForKey:@"total"], [dict objectForKey:@"bm"]];
 		if ([[dict objectForKey:@"read"] boolValue]) {
@@ -134,7 +134,7 @@
 			cell.accessoryType = UITableViewCellAccessoryNone;
 		}
 		if (indexPath.section == 1) {
-			NSDictionary *dict = [self.core postInfoAtIndex:indexPath.row onBoard:self.navigationItem.title];
+			NSDictionary *dict = [self.core postInfoAtIndex:(NSUInteger)indexPath.row onBoard:self.navigationItem.title];
 			cell.textLabel.text = [dict objectForKey:@"title"];
 			cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  %@", [dict objectForKey:@"id"], [dict objectForKey:@"owner"]];
 			if ([[dict objectForKey:@"read"] boolValue]) {
@@ -172,8 +172,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	if (isBoards) {
-		NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-		NSString *boardname = [self.core boardNameAtIndex:indexPath.row];
+		NSString *boardname = [self.core boardNameAtIndex:(NSUInteger)indexPath.row];
 		MasterViewController *postsViewController = [self.core.postsOutputs valueForKey:boardname];
 		if (postsViewController == nil) {
 			if (isPad) {
@@ -209,7 +208,7 @@
 				self.core.contentOutput.swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
 				[self.core.contentOutput.contentText addGestureRecognizer:self.core.contentOutput.swipeRight];
 			}
-			[self.core viewContentOfPost:[self.core postIDAtIndex:indexPath.row onBoard:self.navigationItem.title] onBoard:self.navigationItem.title];
+			[self.core viewContentOfPost:[self.core postIDAtIndex:(NSUInteger)indexPath.row onBoard:self.navigationItem.title] onBoard:self.navigationItem.title];
 		} else if (indexPath.section == 0) {
 			[self.core listNewerPostsOfBoard:self.navigationItem.title];
 		} else if (indexPath.section == 2) {
