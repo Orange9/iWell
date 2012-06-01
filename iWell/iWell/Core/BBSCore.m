@@ -406,7 +406,6 @@ static NSString *reqString = @"iWell_Req";
 							[self.delegate showQuote:dict onBoard:board withID:[postid unsignedIntegerValue] WithXID:[xid unsignedIntegerValue]];
 							return;
 						}
-						NSString *string = [NSString stringWithUTF8String:[data bytes]];
 						[self.delegate printContent:@"DATA CORRUPTED"];
 						return;
 					}

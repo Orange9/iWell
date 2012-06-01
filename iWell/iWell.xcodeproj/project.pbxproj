@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B42FE3B01578A7A200E23B89 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = B42FE3AF1578A7A200E23B89 /* Icon-72.png */; };
+		B42FE3B21578A7AF00E23B89 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B42FE3B11578A7AF00E23B89 /* Icon.png */; };
+		B42FE3B41578A7B300E23B89 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B42FE3B31578A7B300E23B89 /* Icon@2x.png */; };
+		B42FE3B61578A80000E23B89 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B42FE3B51578A80000E23B89 /* Icon-72@2x.png */; };
 		B43D74B81574F02500F584A4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B43D74B71574F02500F584A4 /* UIKit.framework */; };
 		B43D74BA1574F02500F584A4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B43D74B91574F02500F584A4 /* Foundation.framework */; };
 		B43D74BC1574F02500F584A4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B43D74BB1574F02500F584A4 /* CoreGraphics.framework */; };
@@ -41,9 +45,6 @@
 		B43D75391574F14000F584A4 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B43D75311574F14000F584A4 /* LoginViewController.xib */; };
 		B43D753A1574F14000F584A4 /* MasterViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B43D75331574F14000F584A4 /* MasterViewController_iPad.xib */; };
 		B43D753B1574F14000F584A4 /* MasterViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = B43D75351574F14000F584A4 /* MasterViewController_iPhone.xib */; };
-		B43D753F1574F17C00F584A4 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = B43D753C1574F17B00F584A4 /* Icon-72.png */; };
-		B43D75401574F17C00F584A4 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B43D753D1574F17B00F584A4 /* Icon.png */; };
-		B43D75411574F17C00F584A4 /* Icon2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B43D753E1574F17B00F584A4 /* Icon2x.png */; };
 		B43D75471574F2E500F584A4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B43D75461574F2E500F584A4 /* CoreText.framework */; };
 		B43D75491574F2F800F584A4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B43D75481574F2F800F584A4 /* Security.framework */; };
 		B4FF4D161577C8C80080C918 /* PostViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = B4FF4D141577C8C70080C918 /* PostViewController_iPhone.xib */; };
@@ -62,6 +63,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B42FE3AF1578A7A200E23B89 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
+		B42FE3B11578A7AF00E23B89 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		B42FE3B31578A7B300E23B89 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		B42FE3B51578A80000E23B89 /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72@2x.png"; sourceTree = "<group>"; };
 		B43D74B31574F02500F584A4 /* iWell.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iWell.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B43D74B71574F02500F584A4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		B43D74B91574F02500F584A4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -120,9 +125,6 @@
 		B43D75321574F14000F584A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LoginViewController.xib; sourceTree = "<group>"; };
 		B43D75341574F14000F584A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MasterViewController_iPad.xib; sourceTree = "<group>"; };
 		B43D75361574F14000F584A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MasterViewController_iPhone.xib; sourceTree = "<group>"; };
-		B43D753C1574F17B00F584A4 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
-		B43D753D1574F17B00F584A4 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
-		B43D753E1574F17B00F584A4 /* Icon2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon2x.png; sourceTree = "<group>"; };
 		B43D75461574F2E500F584A4 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		B43D75481574F2F800F584A4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		B4FF4D151577C8C80080C918 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/PostViewController_iPhone.xib; sourceTree = "<group>"; };
@@ -160,6 +162,10 @@
 		B43D74A81574F02300F584A4 = {
 			isa = PBXGroup;
 			children = (
+				B42FE3B51578A80000E23B89 /* Icon-72@2x.png */,
+				B42FE3B31578A7B300E23B89 /* Icon@2x.png */,
+				B42FE3B11578A7AF00E23B89 /* Icon.png */,
+				B42FE3AF1578A7A200E23B89 /* Icon-72.png */,
 				B43D74BD1574F02500F584A4 /* iWell */,
 				B43D74B61574F02500F584A4 /* Frameworks */,
 				B43D74B41574F02500F584A4 /* Products */,
@@ -218,9 +224,6 @@
 		B43D74BE1574F02600F584A4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				B43D753C1574F17B00F584A4 /* Icon-72.png */,
-				B43D753D1574F17B00F584A4 /* Icon.png */,
-				B43D753E1574F17B00F584A4 /* Icon2x.png */,
 				B43D74BF1574F02600F584A4 /* iWell-Info.plist */,
 				B43D74C01574F02600F584A4 /* InfoPlist.strings */,
 				B43D74C31574F02600F584A4 /* main.m */,
@@ -362,11 +365,12 @@
 				B43D75391574F14000F584A4 /* LoginViewController.xib in Resources */,
 				B43D753A1574F14000F584A4 /* MasterViewController_iPad.xib in Resources */,
 				B43D753B1574F14000F584A4 /* MasterViewController_iPhone.xib in Resources */,
-				B43D753F1574F17C00F584A4 /* Icon-72.png in Resources */,
-				B43D75401574F17C00F584A4 /* Icon.png in Resources */,
-				B43D75411574F17C00F584A4 /* Icon2x.png in Resources */,
 				B4FF4D161577C8C80080C918 /* PostViewController_iPhone.xib in Resources */,
 				B4FF4D1C1577EAA70080C918 /* PostViewController_iPad.xib in Resources */,
+				B42FE3B01578A7A200E23B89 /* Icon-72.png in Resources */,
+				B42FE3B21578A7AF00E23B89 /* Icon.png in Resources */,
+				B42FE3B41578A7B300E23B89 /* Icon@2x.png in Resources */,
+				B42FE3B61578A80000E23B89 /* Icon-72@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -537,6 +541,7 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -587,6 +592,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -625,6 +631,7 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iWell/iWell-Prefix.pch";
+				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "iWell/iWell-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -637,6 +644,7 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iWell/iWell-Prefix.pch";
+				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "iWell/iWell-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -654,6 +662,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iWell/iWell-Prefix.pch";
+				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "iWellTests/iWellTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -671,6 +680,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iWell/iWell-Prefix.pch";
+				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "iWellTests/iWellTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";

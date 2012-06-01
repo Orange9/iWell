@@ -47,6 +47,7 @@
 		self.splitViewController = [[UISplitViewController alloc] init];
 		self.splitViewController.delegate = detailViewController;
 		self.splitViewController.viewControllers = [NSArray arrayWithObjects:masterNavigationController, detailNavigationController, nil];
+		self.splitViewController.presentsWithGesture = NO;
 		
 		self.window.rootViewController = self.splitViewController;
 		
