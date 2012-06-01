@@ -8,8 +8,12 @@
 
 #import "DetailViewController.h"
 
+#import "PostViewController.h"
+
 @interface DetailViewController ()
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
+
+- (void)reply;
 @end
 
 @implementation DetailViewController
@@ -20,6 +24,9 @@
 @synthesize swipeRight;
 @synthesize core = _core;
 @synthesize masterPopoverController = _masterPopoverController;
+@synthesize board;
+@synthesize postid;
+@synthesize xid;
 
 #pragma mark - Managing the detail item
 
@@ -91,8 +98,6 @@
 	self.masterPopoverController = nil;
 }
 
-
-
 - (IBAction)handleSwipe:(UISwipeGestureRecognizer *)sender {
 	if (sender.direction == UISwipeGestureRecognizerDirectionLeft) {
 		// older / next post
@@ -102,6 +107,20 @@
 		// newer / prev post
 		[self.core viewContentOfNewerPost];
 	}
+}
+
+- (void)reply
+{
+	if (!isPad) {
+		if (self.core.postInput == nil) {
+			self.core.postInput = [[PostViewController alloc] initWithNibName:@"PostViewController_iPhone" bundle:nil];
+		}
+	}
+	self.core.postInput.board = self.board;
+	self.core.postInput.postid = self.postid;
+	self.core.postInput.xid = self.xid;
+	[self.navigationController pushViewController:self.core.postInput animated:YES];
+	[self.core viewQuoteOfPost:self.postid onBoard:self.board WithXID:self.xid];
 }
 
 @end

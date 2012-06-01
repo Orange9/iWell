@@ -11,6 +11,7 @@
 #import "MasterViewController.h"
 #import "DetailViewController.h"
 #import "LoginViewController.h"
+#import "PostViewController.h"
 
 @interface Core ()
 @property (strong, nonatomic) BBSCore *bbsCore;
@@ -27,8 +28,11 @@
 - (void)saveAddress:(NSString *)address;
 - (void)saveUsername:(NSString *)username;
 - (void)savePassword:(NSString *)password;
+- (void)popLoginView;
 - (void)setContentTitle;
 - (void)setContent;
+- (void)setQuote:(NSString *)content;
+- (void)setQuoteTitle:(NSString *)title;
 - (void)reloadPosts:(MasterViewController *)postsViewController;
 - (void)reloadBoards;
 
@@ -44,10 +48,11 @@
 @synthesize posts = _posts;
 @synthesize board = _board;
 @synthesize title = _title;
-@synthesize boardsOutput;
-@synthesize postsOutputs;
-@synthesize contentOutput;
-@synthesize loginInput;
+@synthesize boardsOutput = _boardsOutput;
+@synthesize postsOutputs = _postsOutputs;
+@synthesize contentOutput = _contentOutput;
+@synthesize postInput = _postInput;
+@synthesize loginInput = _loginInput;
 
 #pragma mark - Public Methods
 
@@ -251,6 +256,16 @@
 	[postsViewController.tableView selectRowAtIndexPath:indexpath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
 }
 
+- (void)viewQuoteOfPost:(NSUInteger)postid onBoard:(NSString *)board WithXID:(NSUInteger)xid
+{
+	[self.bbsCore viewQuoteOfPost:postid onBoard:board WithXID:xid];
+}
+
+- (void)post:(NSString *)content WithTitle:(NSString *)title onBoard:(NSString *)board WithID:(NSUInteger)postid WithXID:(NSUInteger)xid
+{
+	[self.bbsCore post:content WithTitle:title onBoard:board WithID:postid WithXID:xid];
+}
+
 #pragma mark - Private Methods
 
 - (void)saveAddress:(NSString *)address
@@ -278,15 +293,39 @@
 	[self.preferenceStorage setValue:password forKey:@"password"];
 }
 
+- (void)popLoginView
+{
+	[self.loginInput.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)setContentTitle
 {
-	contentOutput.navigationItem.title = self.title;
+	self.contentOutput.navigationItem.title = self.title;
 }
 
 - (void)setContent
 {
-	[contentOutput.contentText setContentOffset:CGPointMake(0, 0) animated:NO];
-	[contentOutput.contentText setNeedsDisplay];
+	UIBarButtonItem *replyButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply target:self.contentOutput action:@selector(reply)];
+	self.contentOutput.navigationItem.rightBarButtonItem = replyButton;
+	[self.contentOutput.contentText setContentOffset:CGPointMake(0, 0) animated:NO];
+	[self.contentOutput.contentText setNeedsDisplay];
+}
+
+
+- (void)setQuote:(NSString *)content
+{
+	NSMutableString *string = [NSMutableString stringWithString:@"\n\nSent from "];
+	[string appendString:[UIDevice currentDevice].model];
+	[string appendString:content];
+	[self.postInput.contentInput setText:string];
+	self.postInput.contentInput.selectedRange = NSMakeRange(0, 0);
+}
+
+- (void)setQuoteTitle:(NSString *)title
+{
+	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self.postInput action:@selector(post)];
+	self.postInput.navigationItem.rightBarButtonItem = doneButton;
+	[self.postInput.titleInput setText:title];
 }
 
 - (void)reloadPosts:(MasterViewController *)postsViewController
@@ -300,17 +339,17 @@
 
 - (void)reloadBoards
 {
-	[boardsOutput.tableView reloadData];
+	[self.boardsOutput.tableView reloadData];
 	if (self.bIndex >= 0) {
 		NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.bIndex inSection:0];
-		[boardsOutput.tableView selectRowAtIndexPath:indexpath animated:YES scrollPosition:UITableViewScrollPositionNone];
+		[self.boardsOutput.tableView selectRowAtIndexPath:indexpath animated:YES scrollPosition:UITableViewScrollPositionNone];
 	}
 }
 
 #pragma mark - Delegate Methods
 
 - (void)online {
-	[self.loginInput.navigationController popViewControllerAnimated:YES];
+	[self performSelectorOnMainThread:@selector(popLoginView) withObject:nil waitUntilDone:YES];
 }
 
 - (void)printContent:(NSString *)content
@@ -319,13 +358,26 @@
 	[self performSelectorOnMainThread:@selector(setContentTitle) withObject:nil waitUntilDone:YES];
 }
 
-- (void)showContent:(NSDictionary *)content inBoard:(NSString *)board withID:(NSUInteger)postid
+- (void)showContent:(NSDictionary *)content onBoard:(NSString *)board
 {
+	self.contentOutput.board = board;
+	NSNumber *pid = [content objectForKey:@"id"];
+	if (pid == nil) {
+		self.contentOutput.postid = 0;
+	} else {
+		self.contentOutput.postid = [pid unsignedIntegerValue];
+	}
+	pid = [content objectForKey:@"xid"];
+	if (pid == nil) {
+		self.contentOutput.xid = 0;
+	} else {
+		self.contentOutput.xid = [pid unsignedIntegerValue];
+	}
 	NSString *string = [content objectForKey:@"content"];
 	if (string == nil) {
 		string = @"";
 	}
-	contentOutput.contentText.string = string;
+	self.contentOutput.contentText.string = string;
 	string = [content objectForKey:@"title"];
 	if (string == nil) {
 		string = @"";
@@ -335,7 +387,21 @@
 	[self performSelectorOnMainThread:@selector(setContentTitle) withObject:nil waitUntilDone:YES];
 }
 
-- (void)showPosts:(NSArray *)posts inBoard:(NSString *)board
+- (void)showQuote:(NSDictionary *)content onBoard:(NSString *)board withID:(NSUInteger)postid WithXID:(NSUInteger)xid
+{
+	NSString *string = [content objectForKey:@"content"];
+	if (string == nil) {
+		string = @"";
+	}
+	[self performSelectorOnMainThread:@selector(setQuote:) withObject:string waitUntilDone:YES];
+	string = [content objectForKey:@"title"];
+	if (string == nil) {
+		string = @"";
+	}
+	[self performSelectorOnMainThread:@selector(setQuoteTitle:) withObject:string waitUntilDone:YES];
+}
+
+- (void)showPosts:(NSArray *)posts onBoard:(NSString *)board
 {
 	if ([posts count] == 0) return;
 	MasterViewController *postsViewController = [self.postsOutputs valueForKey:board];
@@ -377,7 +443,7 @@
 		start = importend + 1;
 		end = importend;
 	}
-	if (importstart > end) {
+	if (importend > end) {
 		NSEnumerator *e = [posts objectEnumerator];
 		for (NSDictionary *d in e) {
 			NSNumber *pid = [d objectForKey:@"id"];

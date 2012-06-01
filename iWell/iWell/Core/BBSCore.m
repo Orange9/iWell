@@ -8,7 +8,7 @@
 
 #import "BBSCore.h"
 
-static NSString *reqPath[] = { @"/board/list", @"/favboard/list", @"/board/post_list", @"/post/view" };
+static NSString *reqPath[] = { @"/board/list", @"/favboard/list", @"/board/post_list", @"/post/view", @"/post/quote", @"/post/new" };
 static NSString *reqString = @"iWell_Req";
 
 @interface BBSCore ()
@@ -155,6 +155,42 @@ static NSString *reqString = @"iWell_Req";
 	[self.condition unlock];
 }
 
+- (void)viewQuoteOfPost:(NSUInteger)postid onBoard:(NSString *)board WithXID:(NSUInteger)xid
+{
+	if (self.stage != BBS_ONLINE) return;
+	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
+	[data setValue:[NSNumber numberWithUnsignedInteger:BBS_QUOTE_VIEW] forKey:reqString];
+	[data setValue:self.sessionToken forKey:@"session"];
+	[data setValue:[NSNumber numberWithUnsignedInteger:postid] forKey:@"id"];
+	[data setValue:[NSNumber numberWithUnsignedInteger:xid] forKey:@"xid"];
+	[data setValue:board forKey:@"board"];
+	[self.condition lock];
+	[self.reqQueue addObject:data];
+	[self.condition signal];
+	[self.condition unlock];
+}
+
+- (void)post:(NSString *)content WithTitle:(NSString *)title onBoard:(NSString *)board WithID:(NSUInteger)postid WithXID:(NSUInteger)xid
+{
+	if (self.stage != BBS_ONLINE) return;
+	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
+	[data setValue:[NSNumber numberWithUnsignedInteger:BBS_POST] forKey:reqString];
+	[data setValue:self.sessionToken forKey:@"session"];
+	if (postid > 0) {
+		[data setValue:[NSNumber numberWithUnsignedInteger:postid] forKey:@"re_id"];
+	}
+	if (xid > 0) {
+		[data setValue:[NSNumber numberWithUnsignedInteger:xid] forKey:@"re_xid"];
+	}
+	[data setValue:title forKey:@"title"];
+	[data setValue:content forKey:@"content"];
+	[data setValue:board forKey:@"board"];
+	[self.condition lock];
+	[self.reqQueue addObject:data];
+	[self.condition signal];
+	[self.condition unlock];
+}
+
 #pragma mark - Private Methods
 
 - (void)OAuthWithUserInfo
@@ -220,8 +256,17 @@ static NSString *reqString = @"iWell_Req";
 							array = [NSArray arrayWithObjects:reqNumber, [packedData valueForKey:@"name"], nil];
 						} else if (req == BBS_CONTENT_VIEW) {
 							array = [NSArray arrayWithObjects:reqNumber, [packedData valueForKey:@"board"], [packedData valueForKey:@"id"], nil];
+						} else if (req == BBS_QUOTE_VIEW) {
+							array = [NSArray arrayWithObjects:reqNumber, [packedData valueForKey:@"board"], [packedData valueForKey:@"id"], [packedData valueForKey:@"xid"], nil];
+						} else if (req == BBS_POST) {
+							array = [NSArray arrayWithObjects:reqNumber, [packedData valueForKey:@"board"], [packedData valueForKey:@"id"], [packedData valueForKey:@"xid"], nil];
 						} else break;
-						NSNumber *index = [self.netCore get:[NSURL URLWithString:reqPath[req] relativeToURL:self.baseURL] Data:packedData];
+						NSNumber *index;
+						if (req != BBS_POST) {
+							index = [self.netCore get:[NSURL URLWithString:reqPath[req] relativeToURL:self.baseURL] Data:packedData];
+						} else {
+							index = [self.netCore post:[NSURL URLWithString:reqPath[req] relativeToURL:self.baseURL] Data:packedData];
+						}
 						[self.condition lock];
 						[self.reqMap setObject:array forKey:index];
 						[self.reqQueue removeObjectAtIndex:0];
@@ -324,15 +369,15 @@ static NSString *reqString = @"iWell_Req";
 					}
 					case BBS_POSTS_LIST:
 					{
-						// [{"posttime": <time: post time>, "attachflag": <int: unknown>, "read": <Boolean: Post read>, "title": <string: Post title>, "attachment": <int: Attachment count>, "owner": <string: Poster userid>, "id": <int: Post id>}, {...}...]
+						// [{"posttime": <time: post time>, "attachflag": <int: unknown>, "read": <Boolean: Post read>, "title": <string: Post title>, "attachment": <int: Attachment count>, "owner": <string: Poster userid>, "id": <int: Post id>, "xid": <int: unique post ID>}, {...}...]
 						NSString *board = [reqInfo objectAtIndex:1];
 						if ([data length] == 0) {
-							[self.delegate showPosts:[NSArray array] inBoard:board];
+							[self.delegate showPosts:[NSArray array] onBoard:board];
 							return;
 						}
 						id array = [self.parser objectWithData:data];
 						if ([array isKindOfClass:[NSArray class]]) {
-							[self.delegate showPosts:array inBoard:board];
+							[self.delegate showPosts:array onBoard:board];
 							return;
 						}
 						[self.delegate printContent:@"DATA CORRUPTED"];
@@ -340,15 +385,34 @@ static NSString *reqString = @"iWell_Req";
 					}
 					case BBS_CONTENT_VIEW:
 					{
-						// {"picattach": [{"name": <string: Attachment filename>, "offset:": <int: Attachment offset in post>}, {...}...], "title": <string: Post title>, "content": <string: Post content>, "otherattach": [{...}...], "owner": <string: Poster>, "id": <int: Post ID>}
+						// {"picattach": [{"name": <string: Attachment filename>, "offset:": <int: Attachment offset in post>}, {...}...], "title": <string: Post title>, "content": <string: Post content>, "otherattach": [{...}...], "owner": <string: Poster>, "id": <int: Post ID>, "xid": <int: unique post ID>}
 						NSString *board = [reqInfo objectAtIndex:1];
-						NSNumber *postid = [reqInfo objectAtIndex:2];
 						id dict = [self.parser objectWithData:data];
 						if ([dict isKindOfClass:[NSDictionary class]]) {
-							[self.delegate showContent:dict inBoard:board withID:[postid unsignedIntegerValue]];
+							[self.delegate showContent:dict onBoard:board];
 							return;
 						}
 						[self.delegate printContent:@"DATA CORRUPTED"];
+						return;
+					}
+					case BBS_QUOTE_VIEW:
+					{
+						// {"content": <string: Post content encoded in Base64>, "name": <string: Attachment name>}
+						NSString *board = [reqInfo objectAtIndex:1];
+						NSNumber *postid = [reqInfo objectAtIndex:2];
+						NSNumber *xid = [reqInfo objectAtIndex:3];
+						id dict = [self.parser objectWithData:data];
+						if ([dict isKindOfClass:[NSDictionary class]]) {
+							[self.delegate showQuote:dict onBoard:board withID:[postid unsignedIntegerValue] WithXID:[xid unsignedIntegerValue]];
+							return;
+						}
+						NSString *string = [NSString stringWithUTF8String:[data bytes]];
+						[self.delegate printContent:@"DATA CORRUPTED"];
+						return;
+					}
+					case BBS_POST:
+					{
+						// nothing
 						return;
 					}
 				}

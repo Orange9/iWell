@@ -21,6 +21,10 @@
 
 @property (retain, nonatomic) Core *core;
 
+@property (strong, nonatomic) NSString *board;
+@property (assign, nonatomic) NSUInteger postid;
+@property (assign, nonatomic) NSUInteger xid;
+
 - (IBAction)handleSwipe:(UISwipeGestureRecognizer *)sender;
 
 @end

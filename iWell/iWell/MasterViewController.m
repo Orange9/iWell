@@ -10,10 +10,13 @@
 
 #import "DetailViewController.h"
 #import "LoginViewController.h"
+#import "PostViewController.h"
 
 @interface MasterViewController ()
+
 - (void)changeMode;
 - (void)connect;
+- (void)post;
 @end
 
 @implementation MasterViewController
@@ -49,6 +52,8 @@
 		self.navigationItem.rightBarButtonItem = connectButton;
 		self.tableView.bounces = NO;
 	} else {
+		UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(post)];
+		self.navigationItem.rightBarButtonItem = addButton;
 		self.tableView.bounces = YES;
 	}
 }
@@ -196,6 +201,11 @@
 				}
 				self.core.contentOutput.isPad = NO;
 				[self.navigationController pushViewController:self.core.contentOutput animated:YES];
+			} else {
+				UIViewController *controller = [self.core.contentOutput.navigationController presentedViewController];
+				if (controller != self.core.contentOutput) {
+					[self.core.contentOutput.navigationController popViewControllerAnimated:YES];
+				}
 			}
 			self.core.contentOutput.core = self.core;
 			if (self.core.contentOutput.swipeLeft == nil) {
@@ -242,6 +252,33 @@
 		
 		[self.navigationController pushViewController:self.core.loginInput animated:YES];
 	}
+}
+
+- (void)post
+{
+	if (!isPad) {
+		if (self.core.postInput == nil) {
+			self.core.postInput = [[PostViewController alloc] initWithNibName:@"PostViewController_iPhone" bundle:nil];
+		}
+		[self.navigationController pushViewController:self.core.postInput animated:YES];
+		self.core.postInput.core = self.core;
+	} else {
+		UIViewController *controller = [self.core.contentOutput.navigationController presentedViewController];
+		if (controller == self.core.postInput) {
+			return;
+		}
+		[self.core.contentOutput.navigationController pushViewController:self.core.postInput animated:YES];
+	}
+	self.core.postInput.board = self.navigationItem.title;
+	self.core.postInput.postid = 0;
+	self.core.postInput.xid = 0;
+	self.core.postInput.titleInput.text = @"";
+	NSMutableString *string = [NSMutableString stringWithString:@"\n\nSent from "];
+	[string appendString:[UIDevice currentDevice].model];
+	self.core.postInput.contentInput.text = string;
+	self.core.postInput.contentInput.selectedRange = NSMakeRange(0, 0);
+	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self.core.postInput action:@selector(post)];
+	self.core.postInput.navigationItem.rightBarButtonItem = doneButton;
 }
 
 @end

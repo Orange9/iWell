@@ -15,8 +15,9 @@
 
 - (void)online;
 - (void)printContent:(NSString *)content;
-- (void)showContent:(NSDictionary *)content inBoard:(NSString *)board withID:(NSUInteger)postid;
-- (void)showPosts:(NSArray *)posts inBoard:(NSString *)board;
+- (void)showContent:(NSDictionary *)content onBoard:(NSString *)board;
+- (void)showQuote:(NSDictionary *)content onBoard:(NSString *)board withID:(NSUInteger)postid WithXID:(NSUInteger)xid;
+- (void)showPosts:(NSArray *)posts onBoard:(NSString *)board;
 - (void)showBoards:(NSArray *)boards;
 
 @end
@@ -39,6 +40,10 @@ enum bbs_req_t {
 	BBS_POSTS_LIST,
 	
 	BBS_CONTENT_VIEW,
+	
+	BBS_QUOTE_VIEW,
+	
+	BBS_POST,
 };
 
 @interface BBSCore : NSObject <NetCoreDelegate> {
@@ -58,5 +63,7 @@ enum bbs_req_t {
 - (void)listFavBoardsInRange:(NSRange)range;
 - (void)listPostsInRange:(NSRange)range onBoard:(NSString *)board;
 - (void)viewContentOfPost:(NSUInteger)postid onBoard:(NSString *)board;
+- (void)viewQuoteOfPost:(NSUInteger)postid onBoard:(NSString *)board WithXID:(NSUInteger)xid;
+- (void)post:(NSString *)content WithTitle:(NSString *)title onBoard:(NSString *)board WithID:(NSUInteger)postid WithXID:(NSUInteger)xid;
 
 @end

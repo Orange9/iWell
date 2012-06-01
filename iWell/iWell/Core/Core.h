@@ -15,6 +15,7 @@
 @class MasterViewController;
 @class DetailViewController;
 @class LoginViewController;
+@class PostViewController;
 
 @interface Core : NSObject <BBSCoreDelegate> {
 	
@@ -23,6 +24,7 @@
 @property (retain, nonatomic) MasterViewController *boardsOutput;
 @property (retain, nonatomic) NSMutableDictionary *postsOutputs;
 @property (retain, nonatomic) DetailViewController *contentOutput;
+@property (retain, nonatomic) PostViewController *postInput;
 @property (retain, nonatomic) LoginViewController *loginInput;
 
 - (NSString *)address;
@@ -47,6 +49,8 @@
 - (void)viewContentOfPost:(NSUInteger)postid onBoard:(NSString *)board;
 - (void)viewContentOfNewerPost;
 - (void)viewContentOfOlderPost;
+- (void)viewQuoteOfPost:(NSUInteger)postid onBoard:(NSString *)board WithXID:(NSUInteger)xid;
+- (void)post:(NSString *)content WithTitle:(NSString *)title onBoard:(NSString *)board WithID:(NSUInteger)postid WithXID:(NSUInteger)xid;
 
 @end
 

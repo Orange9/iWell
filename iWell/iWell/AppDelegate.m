@@ -12,6 +12,8 @@
 
 #import "DetailViewController.h"
 
+#import "PostViewController.h"
+
 #import "Core.h"
 
 @implementation AppDelegate
@@ -48,13 +50,18 @@
 		
 		self.window.rootViewController = self.splitViewController;
 		
+		PostViewController *postViewController = [[PostViewController alloc] initWithNibName:@"PostViewController_iPad" bundle:nil];
+		
 		masterViewController.core = core;
 		masterViewController.isPad = YES;
 		masterViewController.isBoards = YES;
 		masterViewController.isFavorite = YES;
+		detailViewController.core = core;
 		detailViewController.isPad = YES;
+		postViewController.core = core;
 		core.boardsOutput = masterViewController;
 		core.contentOutput = detailViewController;
+		core.postInput = postViewController;
 		View *view = (View *)detailViewController.view;
 		view.converter.charCountInLine = 80;
 	}
