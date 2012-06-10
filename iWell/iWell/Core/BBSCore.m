@@ -289,8 +289,11 @@ static NSString *reqString = @"iWell_Req";
 {
 	if (data == nil) {
 		// something bad happens
-		[self.delegate printContent:[error localizedDescription]];
-		self.stage = BBS_IDLE;
+		NSString *string = [NSString stringWithFormat:@"%d: %@", error.code, error.localizedDescription];
+		[self.delegate printContent:string];
+		if (error.code != NSURLErrorTimedOut) {
+			self.stage = BBS_IDLE;
+		}
 	} else {
 		switch (self.stage) {
 			case BBS_OAUTH_ACCESS_RECV:

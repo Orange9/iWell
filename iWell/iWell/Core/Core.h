@@ -35,6 +35,8 @@
 - (NSDictionary *)postInfoAtIndex:(NSUInteger)index onBoard:(NSString *)board;
 - (NSString *)boardNameAtIndex:(NSUInteger)index;
 - (NSUInteger)postIDAtIndex:(NSUInteger)index onBoard:(NSString *)board;
+- (NSUInteger)newestPostIDAtIndexOnBoard:(NSString *)board;
+- (NSUInteger)oldestPostIDAtIndexOnBoard:(NSString *)board;
 
 - (NSUInteger)boardsCount;
 - (NSUInteger)postsCountOnBoard:(NSString *)board;
@@ -46,6 +48,7 @@
 - (void)listPostsOfBoard:(NSString *)board;
 - (void)listNewerPostsOfBoard:(NSString *)board;
 - (void)listOlderPostsOfBoard:(NSString *)board;
+- (void)listPostsNear:(NSUInteger)postid onBoard:(NSString *)board;
 - (void)viewContentOfPost:(NSUInteger)postid onBoard:(NSString *)board;
 - (void)viewContentOfNewerPost;
 - (void)viewContentOfOlderPost;

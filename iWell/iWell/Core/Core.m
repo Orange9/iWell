@@ -161,6 +161,28 @@
 	return [postid unsignedIntegerValue];
 }
 
+- (NSUInteger)newestPostIDAtIndexOnBoard:(NSString *)board
+{
+	NSMutableArray *posts = [self.posts objectForKey:board];
+	NSDictionary *dict = [posts objectAtIndex:0];
+	NSNumber *postid = [dict objectForKey:@"id"];
+	if (postid == nil) {
+		return 0;
+	}
+	return [postid unsignedIntegerValue];
+}
+
+- (NSUInteger)oldestPostIDAtIndexOnBoard:(NSString *)board
+{
+	NSMutableArray *posts = [self.posts objectForKey:board];
+	NSDictionary *dict = [posts lastObject];
+	NSNumber *postid = [dict objectForKey:@"id"];
+	if (postid == nil) {
+		return 0;
+	}
+	return [postid unsignedIntegerValue];
+}
+
 - (NSUInteger)boardsCount
 {
 	return [self.boards count];
@@ -194,48 +216,40 @@
 {
 	self.index = -1;
 	MasterViewController *postViewController = [self.postsOutputs valueForKey:board];
-	[postViewController.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
 	[self.bbsCore listPostsInRange:NSMakeRange(0, 20) onBoard:board];
+}
+
+- (void)listPostsNear:(NSUInteger)postid onBoard:(NSString *)board
+{
+	NSUInteger newest = [self newestPostIDAtIndexOnBoard:board];
+	NSUInteger oldest = [self oldestPostIDAtIndexOnBoard:board];
+	NSUInteger hi = postid;
+	NSUInteger lo = postid;
+	if (hi + 10 > newest) {
+		hi = newest + 20;
+	}
+	if (lo - 10 < oldest) {
+		lo = oldest - 20;
+	}
+	if (lo < hi) {
+		[self.bbsCore listPostsInRange:NSMakeRange(lo, hi - lo + 1) onBoard:board];
+	}
 }
 
 - (void)listNewerPostsOfBoard:(NSString *)board
 {
-	if ([self.posts count] != 0) {
-		NSMutableArray *posts = [self.posts objectForKey:board];
-		NSDictionary *dict = [posts objectAtIndex:0];
-		NSNumber *postid = [dict objectForKey:@"id"];
-		if (postid == nil) {
-			return;
-		}
-		NSUInteger index = [postid unsignedIntegerValue] + 1;
-		[self.bbsCore listPostsInRange:NSMakeRange(index, 20) onBoard:board];
-	}
+	[self listPostsNear:[self newestPostIDAtIndexOnBoard:board] onBoard:board];
 }
 
 - (void)listOlderPostsOfBoard:(NSString *)board
 {
-	if ([self.posts count] != 0) {
-		NSMutableArray *posts = [self.posts objectForKey:board];
-		NSDictionary *dict = [posts lastObject];
-		NSNumber *postid = [dict objectForKey:@"id"];
-		if (postid == nil) {
-			return;
-		}
-		NSUInteger index = [postid unsignedIntegerValue];
-		if (index > 20) {
-			index -= 20;
-		} else {
-			index = 1;
-		}
-		[self.bbsCore listPostsInRange:NSMakeRange(index, 20) onBoard:board];
-	}
+	[self listPostsNear:[self oldestPostIDAtIndexOnBoard:board] onBoard:board];
 }
 
 - (void)viewContentOfPost:(NSUInteger)postid onBoard:(NSString *)board
 {
 	self.board = board;
 	[self.bbsCore viewContentOfPost:postid onBoard:board];
-	[self.bbsCore listPostsInRange:NSMakeRange(postid - 10, 20) onBoard:board];
 }
 
 - (void)viewContentOfNewerPost {
@@ -366,6 +380,7 @@
 		self.contentOutput.postid = 0;
 	} else {
 		self.contentOutput.postid = [pid unsignedIntegerValue];
+		[self listPostsNear:[pid unsignedIntegerValue] onBoard:board];
 	}
 	pid = [content objectForKey:@"xid"];
 	if (pid == nil) {
