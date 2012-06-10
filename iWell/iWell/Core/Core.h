@@ -26,6 +26,7 @@
 @property (retain, nonatomic) DetailViewController *contentOutput;
 @property (retain, nonatomic) PostViewController *postInput;
 @property (retain, nonatomic) LoginViewController *loginInput;
+@property (assign, nonatomic) BOOL isOAuth;
 
 - (NSString *)address;
 - (NSString *)username;
@@ -41,7 +42,9 @@
 - (NSUInteger)boardsCount;
 - (NSUInteger)postsCountOnBoard:(NSString *)board;
 
+- (void)OAuth:(NSString *)address;
 - (void)connect:(NSString *)address withUsername:(NSString *)username Password:(NSString *)password;
+- (void)connectWithToken:(NSString *)token;
 
 - (void)listBoards;
 - (void)listFavBoards;

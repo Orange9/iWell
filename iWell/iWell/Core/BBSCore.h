@@ -56,7 +56,9 @@ enum bbs_req_t {
 @property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) NSString *password;
 
+- (void)OAuth;
 - (void)connect;
+- (void)connectWithToken:(NSString *)token;
 - (void)disconnect;
 
 - (void)listBoardsInRange:(NSRange)range;

@@ -11,6 +11,7 @@
 enum http_method_t {
 	HTTP_GET,
 	HTTP_POST,
+	HTTP_EXTERNAL,
 	HTTP_METHOD_MAX,
 };
 
@@ -62,6 +63,11 @@ static NSString *methodString[] = { @"GET", @"POST" };
 	return [self request:url Data:data Method:HTTP_POST];
 }
 
+- (NSNumber *)open:(NSURL *)url Data:(NSDictionary *)data
+{
+	return [self request:url Data:data Method:HTTP_EXTERNAL];
+}
+
 #pragma mark - Private Methods
 
 - (NSNumber *)request:(NSURL *)url Data:(NSDictionary *)data Method:(enum http_method_t)method
@@ -90,6 +96,8 @@ static NSString *methodString[] = { @"GET", @"POST" };
 		[request setValue:[NSString stringWithFormat:@"%u", [postData length]] forHTTPHeaderField:@"Content-Length"];
 		[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
 		[request setHTTPBody:postData];
+	} else if (method == HTTP_EXTERNAL) {
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", [url absoluteString], dataString]]];
 	}
 	
 	Connection *connection = [[Connection alloc] initWithRequest:request delegate:self startImmediately:NO];

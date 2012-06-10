@@ -63,6 +63,11 @@
 	[self.core connect:self.addressInput.text withUsername:self.usernameInput.text Password:self.passwordInput.text];
 }
 
+- (IBAction)OAuth:(id)sender
+{
+	[self.core OAuth:self.addressInput.text];
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
 	if (textField == self.addressInput) {

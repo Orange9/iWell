@@ -21,22 +21,24 @@
 @synthesize window = _window;
 @synthesize navigationController = _navigationController;
 @synthesize splitViewController = _splitViewController;
+@synthesize core = _core;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-	Core *core = [[Core alloc] init];
+	self.core = [[Core alloc] init];
 	// Override point for customization after application launch.
 	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
 		MasterViewController *masterViewController = [[MasterViewController alloc] initWithNibName:@"MasterViewController_iPhone" bundle:nil];
 		self.navigationController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
 		self.window.rootViewController = self.navigationController;
 		
-		masterViewController.core = core;
+		masterViewController.core = self.core;
 		masterViewController.isPad = NO;
 		masterViewController.isBoards = YES;
 		masterViewController.isFavorite = YES;
-		core.boardsOutput = masterViewController;
+		self.core.boardsOutput = masterViewController;
+		self.core.isOAuth = NO;
 	} else {
 		MasterViewController *masterViewController = [[MasterViewController alloc] initWithNibName:@"MasterViewController_iPad" bundle:nil];
 		UINavigationController *masterNavigationController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
@@ -53,20 +55,29 @@
 		
 		PostViewController *postViewController = [[PostViewController alloc] initWithNibName:@"PostViewController_iPad" bundle:nil];
 		
-		masterViewController.core = core;
+		masterViewController.core = self.core;
 		masterViewController.isPad = YES;
 		masterViewController.isBoards = YES;
 		masterViewController.isFavorite = YES;
-		detailViewController.core = core;
+		detailViewController.core = self.core;
 		detailViewController.isPad = YES;
-		postViewController.core = core;
-		core.boardsOutput = masterViewController;
-		core.contentOutput = detailViewController;
-		core.postInput = postViewController;
+		postViewController.core = self.core;
+		self.core.boardsOutput = masterViewController;
+		self.core.contentOutput = detailViewController;
+		self.core.postInput = postViewController;
+		self.core.isOAuth = NO;
 		View *view = (View *)detailViewController.view;
 		view.converter.charCountInLine = 80;
 	}
 	[self.window makeKeyAndVisible];
+	return YES;
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+	NSString *token = [[url query] substringFromIndex:5];
+	self.core.isOAuth = YES;
+	[self.core connectWithToken:token];
 	return YES;
 }
 

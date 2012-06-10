@@ -19,5 +19,7 @@
 @property (retain, nonatomic) Core *core;
 
 - (IBAction)connect:(id)sender;
+- (IBAction)OAuth:(id)sender;
+
 
 @end

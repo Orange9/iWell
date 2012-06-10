@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "Core.h"
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
@@ -17,5 +19,7 @@
 @property (strong, nonatomic) UINavigationController *navigationController;
 
 @property (strong, nonatomic) UISplitViewController *splitViewController;
+
+@property (strong, nonatomic) Core *core;
 
 @end

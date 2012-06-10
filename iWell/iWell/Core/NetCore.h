@@ -24,5 +24,6 @@
 
 - (NSNumber *)get:(NSURL *)url Data:(NSDictionary *)data;
 - (NSNumber *)post:(NSURL *)url Data:(NSDictionary *)data;
+- (NSNumber *)open:(NSURL *)url Data:(NSDictionary *)data;
 
 @end

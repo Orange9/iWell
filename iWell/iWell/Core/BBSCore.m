@@ -64,6 +64,16 @@ static NSString *reqString = @"iWell_Req";
 	return self;
 }
 
+- (void)OAuth
+{
+	NSString *path = @"/auth/auth";
+	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
+	[data setValue:@"iwell9://" forKey:@"redirect_uri"];
+	[data setValue:@"code" forKey:@"response_type"];
+	[data setValue:@"1" forKey:@"client_id"];
+	[self.netCore open:[NSURL URLWithString:path relativeToURL:self.baseURL] Data:data];
+}
+
 - (void)connect
 {
 	if (self.stage == BBS_IDLE) {
@@ -73,6 +83,15 @@ static NSString *reqString = @"iWell_Req";
 		// [receiver showContent:@"MMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHH\n国国国国国同同同同同国国国国国同同同同同国国国国国同同同同同国国国国国同同同同同"];
 		// [receiver printContent:@"abcdefghijABCDEFGHIJklmnopqrstKLMNOPQRST1234567890"];
 		// [receiver showContent:@"\e[31m红RED\e[32mGREEN绿\e[m黑\n\e[41m红底\e[42m绿底\e[31m红字\e[1m亮\e[m"];
+		[NSThread detachNewThreadSelector:@selector(run) toTarget:self withObject:nil];
+	}
+}
+
+- (void)connectWithToken:(NSString *)token
+{
+	if (self.stage == BBS_IDLE) {
+		self.authorizationToken = token;
+		self.stage = BBS_OAUTH_SESSION;
 		[NSThread detachNewThreadSelector:@selector(run) toTarget:self withObject:nil];
 	}
 }

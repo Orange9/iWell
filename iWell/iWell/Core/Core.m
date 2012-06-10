@@ -53,6 +53,7 @@
 @synthesize contentOutput = _contentOutput;
 @synthesize postInput = _postInput;
 @synthesize loginInput = _loginInput;
+@synthesize isOAuth = _isOAuth;
 
 #pragma mark - Public Methods
 
@@ -194,12 +195,23 @@
 	return [posts count];
 }
 
+- (void)OAuth:(NSString *)address
+{
+	[self saveAddress:address];
+	[self.bbsCore OAuth];
+}
+
 - (void)connect:(NSString *)address withUsername:(NSString *)username Password:(NSString *)password
 {
 	[self saveAddress:address];
 	[self saveUsername:username];
 	[self savePassword:password];
 	[self.bbsCore connect];
+}
+
+- (void)connectWithToken:(NSString *)token
+{
+	[self.bbsCore connectWithToken:token];
 }
 
 - (void)listBoards
@@ -325,7 +337,6 @@
 	[self.contentOutput.contentText setNeedsDisplay];
 }
 
-
 - (void)setQuote:(NSString *)content
 {
 	NSMutableString *string = [NSMutableString stringWithString:@"\n\nSent from "];
@@ -363,7 +374,11 @@
 #pragma mark - Delegate Methods
 
 - (void)online {
-	[self performSelectorOnMainThread:@selector(popLoginView) withObject:nil waitUntilDone:YES];
+	if (!self.isOAuth) {
+		[self performSelectorOnMainThread:@selector(popLoginView) withObject:nil waitUntilDone:YES];
+	} else {
+		[self.boardsOutput viewWillAppear:YES];
+	}
 }
 
 - (void)printContent:(NSString *)content
