@@ -38,7 +38,7 @@
 		masterViewController.isBoards = YES;
 		masterViewController.isFavorite = YES;
 		self.core.boardsOutput = masterViewController;
-		self.core.isOAuth = NO;
+		self.core.isOAuth = YES;
 	} else {
 		MasterViewController *masterViewController = [[MasterViewController alloc] initWithNibName:@"MasterViewController_iPad" bundle:nil];
 		UINavigationController *masterNavigationController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
@@ -65,9 +65,12 @@
 		self.core.boardsOutput = masterViewController;
 		self.core.contentOutput = detailViewController;
 		self.core.postInput = postViewController;
-		self.core.isOAuth = NO;
+		self.core.isOAuth = YES;
 		View *view = (View *)detailViewController.view;
 		view.converter.charCountInLine = 80;
+	}
+	if ([launchOptions valueForKey:UIApplicationLaunchOptionsURLKey] == nil) {
+		[self.core resume];
 	}
 	[self.window makeKeyAndVisible];
 	return YES;
@@ -76,7 +79,6 @@
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
 	NSString *token = [[url query] substringFromIndex:5];
-	self.core.isOAuth = YES;
 	[self.core connectWithToken:token];
 	return YES;
 }

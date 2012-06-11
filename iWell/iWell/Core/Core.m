@@ -28,6 +28,7 @@
 - (void)saveAddress:(NSString *)address;
 - (void)saveUsername:(NSString *)username;
 - (void)savePassword:(NSString *)password;
+- (void)saveToken:(NSString *)token;
 - (void)popLoginView;
 - (void)setContentTitle;
 - (void)setContent;
@@ -66,6 +67,7 @@
 	self.bbsCore.baseURL = [NSURL URLWithString:[self.preferenceStorage valueForKey:@"address"]];
 	self.bbsCore.username = [self.preferenceStorage valueForKey:@"username"];
 	self.bbsCore.password = [self.preferenceStorage valueForKey:@"password"];
+	self.bbsCore.sessionToken = [self.preferenceStorage valueForKey:@"token"];
 	self.boards = [NSMutableArray array];
 	self.posts = [NSMutableDictionary dictionary];
 	self.bIndex = -1;
@@ -74,6 +76,8 @@
 	self.boardsOutput = nil;
 	self.postsOutputs = [NSMutableDictionary dictionary];
 	self.contentOutput = nil;
+	
+	//[self.bbsCore connectWithStage:BBS_OAUTH_VERIFY];
 	return self;
 }
 
@@ -159,6 +163,9 @@
 	[dict setValue:[NSNumber numberWithBool:YES] forKey:@"read"];
 	[posts replaceObjectAtIndex:index withObject:dict];
 	self.index = index;
+	
+	MasterViewController *postsViewController = [self.postsOutputs valueForKey:board];
+	[self performSelectorOnMainThread:@selector(reloadPosts:) withObject:postsViewController waitUntilDone:YES];
 	return [postid unsignedIntegerValue];
 }
 
@@ -206,12 +213,18 @@
 	[self saveAddress:address];
 	[self saveUsername:username];
 	[self savePassword:password];
-	[self.bbsCore connect];
+	[self.bbsCore connectWithStage:BBS_OAUTH_ACCESS];
 }
 
 - (void)connectWithToken:(NSString *)token
 {
-	[self.bbsCore connectWithToken:token];
+	self.bbsCore.authorizationToken = token;
+	[self.bbsCore connectWithStage:BBS_OAUTH_SESSION];
+}
+
+- (void)resume
+{
+	[self.bbsCore connectWithStage:BBS_OAUTH_VERIFY];
 }
 
 - (void)listBoards
@@ -319,6 +332,14 @@
 	[self.preferenceStorage setValue:password forKey:@"password"];
 }
 
+- (void)saveToken:(NSString *)token
+{
+	if (![self.bbsCore.sessionToken isEqualToString:token]) {
+		self.bbsCore.sessionToken = token;
+	}
+	[self.preferenceStorage setValue:token forKey:@"token"];
+}
+
 - (void)popLoginView
 {
 	[self.loginInput.navigationController popViewControllerAnimated:YES];
@@ -373,12 +394,14 @@
 
 #pragma mark - Delegate Methods
 
-- (void)online {
+- (void)online:(NSString *)token
+{
 	if (!self.isOAuth) {
 		[self performSelectorOnMainThread:@selector(popLoginView) withObject:nil waitUntilDone:YES];
 	} else {
 		[self.boardsOutput viewWillAppear:YES];
 	}
+	[self.preferenceStorage setValue:token forKey:@"token"];
 }
 
 - (void)printContent:(NSString *)content

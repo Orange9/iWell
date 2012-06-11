@@ -21,13 +21,11 @@ static NSString *reqString = @"iWell_Req";
 @property (strong, nonatomic) NSMutableArray *reqQueue;
 @property (strong, nonatomic) NSMutableDictionary *reqMap;
 
-@property (strong, nonatomic) NSString *authorizationToken;
-@property (strong, nonatomic) NSString *sessionToken;
-
 @property (strong, nonatomic) NSCondition *condition;
 
 - (void)OAuthWithUserInfo;
 - (void)OAuthWithToken;
+- (void)OAuthVerify;
 
 - (void)run;
 
@@ -74,24 +72,18 @@ static NSString *reqString = @"iWell_Req";
 	[self.netCore open:[NSURL URLWithString:path relativeToURL:self.baseURL] Data:data];
 }
 
-- (void)connect
+- (void)connectWithStage:(enum bbs_stage_t)stage
 {
 	if (self.stage == BBS_IDLE) {
 		self.stage = BBS_OAUTH_ACCESS;
+		if (stage == BBS_OAUTH_SESSION || stage == BBS_OAUTH_VERIFY) {
+			self.stage = stage;
+		}
 		// [receiver showContent:@"\e[41mabcdefghijklmnopqrstuvwxyz\nABCDEGHIJK"];
 		//	[receiver showContent:@"\e[30mabcdefgh\e[31mabcdefgh\e[32mabcdefgh\e[33mabcdefgh\e[34mabcdefgh\e[35mabcdefgh\e[36mabcdefgh\e[37mabcdefgh\e[30;1mabcdefgh\e[31;1mabcdefgh\e[32;1mabcdefgh\e[33;1mabcdefgh\e[34;1mabcdefgh\e[35;1mabcdefgh\e[36;1mabcdefgh\e[37;1mabcdefgh\e[mXXXXXX\e[40mabcdefgh\e[41mabcdefgh\e[42mabcdefgh\e[43mabcdefgh\e[44mabcdefgh\e[45mabcdefgh\e[46mabcdefgh\e[47mabcdefgh\e[40;1mabcdefgh\e[41;1mabcdefgh\e[42;1mabcdefgh\e[43;1mabcdefgh\e[44;1mabcdefgh\e[45;1mabcdefgh\e[46;1mabcdefgh\e[47;1mabcdefgh\e[mXXXXXX\e[31;42mabcdefgh\e[30;42mabcdefgh"];
 		// [receiver showContent:@"MMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHH\n国国国国国同同同同同国国国国国同同同同同国国国国国同同同同同国国国国国同同同同同"];
 		// [receiver printContent:@"abcdefghijABCDEFGHIJklmnopqrstKLMNOPQRST1234567890"];
 		// [receiver showContent:@"\e[31m红RED\e[32mGREEN绿\e[m黑\n\e[41m红底\e[42m绿底\e[31m红字\e[1m亮\e[m"];
-		[NSThread detachNewThreadSelector:@selector(run) toTarget:self withObject:nil];
-	}
-}
-
-- (void)connectWithToken:(NSString *)token
-{
-	if (self.stage == BBS_IDLE) {
-		self.authorizationToken = token;
-		self.stage = BBS_OAUTH_SESSION;
 		[NSThread detachNewThreadSelector:@selector(run) toTarget:self withObject:nil];
 	}
 }
@@ -239,6 +231,16 @@ static NSString *reqString = @"iWell_Req";
 	[self.netCore get:[NSURL URLWithString:path relativeToURL:self.baseURL] Data:data];
 }
 
+- (void)OAuthVerify
+{
+	if (self.stage != BBS_OAUTH_VERIFY) return;
+	self.stage = BBS_OAUTH_VERIFY_RECV;
+	NSString *path = @"/session/verify";
+	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
+	[data setValue:self.sessionToken forKey:@"session"];
+	[self.netCore get:[NSURL URLWithString:path relativeToURL:self.baseURL] Data:data];
+}
+
 - (void)run
 {
 	@autoreleasepool {
@@ -254,6 +256,12 @@ static NSString *reqString = @"iWell_Req";
 				{
 					[self.delegate printContent:@"LOGGING IN ..."];
 					[self OAuthWithToken];
+					break;
+				}
+				case BBS_OAUTH_VERIFY:
+				{
+					[self.delegate printContent:@"RESUMING ..."];
+					[self OAuthVerify];
 					break;
 				}
 				case BBS_ONLINE:
@@ -344,13 +352,30 @@ static NSString *reqString = @"iWell_Req";
 							self.sessionToken = value;
 							self.stage = BBS_ONLINE;
 							[self.delegate printContent:@"READY"];
-							[self.delegate online];
+							[self.delegate online:value];
 							return;
 						}
 					}
 				}
 				self.stage = BBS_IDLE;
 				[self.delegate printContent:@"OAUTH FAILED"];
+				goto wakeup;
+			}
+			case BBS_OAUTH_VERIFY_RECV:
+			{
+				// {"status": <string: Status>}
+				id dict = [self.parser objectWithData:data];
+				if ([dict isKindOfClass:[NSDictionary class]]) {
+					NSString *value = [(NSDictionary *)dict objectForKey:@"status"];
+					if (value != nil && [value isEqualToString:@"ok"]) {
+						self.stage = BBS_ONLINE;
+						[self.delegate printContent:@"READY"];
+						[self.delegate online:self.sessionToken];
+						return;
+					}
+				}
+				self.stage = BBS_IDLE;
+				[self.delegate printContent:@"RESUMING FAILED, NEED RECONNECT"];
 				goto wakeup;
 			}
 			case BBS_ONLINE:

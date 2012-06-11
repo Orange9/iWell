@@ -60,6 +60,7 @@
 
 - (IBAction)connect:(id)sender
 {
+	self.core.isOAuth = NO;
 	[self.core connect:self.addressInput.text withUsername:self.usernameInput.text Password:self.passwordInput.text];
 }
 

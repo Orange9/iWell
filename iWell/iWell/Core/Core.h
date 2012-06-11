@@ -45,6 +45,7 @@
 - (void)OAuth:(NSString *)address;
 - (void)connect:(NSString *)address withUsername:(NSString *)username Password:(NSString *)password;
 - (void)connectWithToken:(NSString *)token;
+- (void)resume;
 
 - (void)listBoards;
 - (void)listFavBoards;

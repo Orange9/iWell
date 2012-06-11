@@ -13,7 +13,7 @@
 
 @protocol BBSCoreDelegate <NSObject>
 
-- (void)online;
+- (void)online:(NSString *)token;
 - (void)printContent:(NSString *)content;
 - (void)showContent:(NSDictionary *)content onBoard:(NSString *)board;
 - (void)showQuote:(NSDictionary *)content onBoard:(NSString *)board withID:(NSUInteger)postid WithXID:(NSUInteger)xid;
@@ -29,6 +29,8 @@ enum bbs_stage_t {
 	BBS_OAUTH_ACCESS_RECV,
 	BBS_OAUTH_SESSION,
 	BBS_OAUTH_SESSION_RECV,
+	BBS_OAUTH_VERIFY,
+	BBS_OAUTH_VERIFY_RECV,
 	
 	BBS_ONLINE,
 };
@@ -56,9 +58,11 @@ enum bbs_req_t {
 @property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) NSString *password;
 
+@property (strong, nonatomic) NSString *authorizationToken;
+@property (strong, nonatomic) NSString *sessionToken;
+
 - (void)OAuth;
-- (void)connect;
-- (void)connectWithToken:(NSString *)token;
+- (void)connectWithStage:(enum bbs_stage_t)stage;
 - (void)disconnect;
 
 - (void)listBoardsInRange:(NSRange)range;
