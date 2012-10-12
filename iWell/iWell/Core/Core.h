@@ -12,25 +12,21 @@
 #import "StringConverter.h"
 #import "PreferenceStorage.h"
 
-@class MasterViewController;
-@class DetailViewController;
+@class BoardsViewController;
+@class ContentViewController;
 @class LoginViewController;
-@class PostViewController;
+@class PostEditViewController;
 
 @interface Core : NSObject <BBSCoreDelegate> {
 	
 }
 
-@property (retain, nonatomic) MasterViewController *boardsOutput;
-@property (retain, nonatomic) NSMutableDictionary *postsOutputs;
-@property (retain, nonatomic) DetailViewController *contentOutput;
-@property (retain, nonatomic) PostViewController *postInput;
+@property (retain, nonatomic) BoardsViewController *boardsOutput;
+@property (retain, nonatomic) ContentViewController *contentOutput;
+@property (retain, nonatomic) PostEditViewController *postInput;
 @property (retain, nonatomic) LoginViewController *loginInput;
-@property (assign, nonatomic) BOOL isOAuth;
 
 - (NSString *)address;
-- (NSString *)username;
-- (NSString *)password;
 
 - (NSDictionary *)boardInfoAtIndex:(NSUInteger)index;
 - (NSDictionary *)postInfoAtIndex:(NSUInteger)index onBoard:(NSString *)board;
@@ -43,7 +39,6 @@
 - (NSUInteger)postsCountOnBoard:(NSString *)board;
 
 - (void)OAuth:(NSString *)address;
-- (void)connect:(NSString *)address withUsername:(NSString *)username Password:(NSString *)password;
 - (void)connectWithToken:(NSString *)token;
 - (void)resume;
 

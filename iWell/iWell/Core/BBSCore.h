@@ -55,8 +55,6 @@ enum bbs_req_t {
 @property (assign, nonatomic) id<BBSCoreDelegate> delegate;
 
 @property (strong, nonatomic) NSURL *baseURL;
-@property (strong, nonatomic) NSString *username;
-@property (strong, nonatomic) NSString *password;
 
 @property (strong, nonatomic) NSString *authorizationToken;
 @property (strong, nonatomic) NSString *sessionToken;

@@ -23,7 +23,6 @@ static NSString *reqString = @"iWell_Req";
 
 @property (strong, nonatomic) NSCondition *condition;
 
-- (void)OAuthWithUserInfo;
 - (void)OAuthWithToken;
 - (void)OAuthVerify;
 
@@ -34,8 +33,6 @@ static NSString *reqString = @"iWell_Req";
 @implementation BBSCore
 
 @synthesize baseURL = _baseURL;
-@synthesize username = _username;
-@synthesize password = _password;
 
 @synthesize parser = _parser;
 @synthesize netCore = _netCore;
@@ -74,11 +71,8 @@ static NSString *reqString = @"iWell_Req";
 
 - (void)connectWithStage:(enum bbs_stage_t)stage
 {
-	if (self.stage == BBS_IDLE) {
-		self.stage = BBS_OAUTH_ACCESS;
-		if (stage == BBS_OAUTH_SESSION || stage == BBS_OAUTH_VERIFY) {
-			self.stage = stage;
-		}
+	if (stage == BBS_OAUTH_SESSION || stage == BBS_OAUTH_VERIFY) {
+		self.stage = stage;
 		// [receiver showContent:@"\e[41mabcdefghijklmnopqrstuvwxyz\nABCDEGHIJK"];
 		//	[receiver showContent:@"\e[30mabcdefgh\e[31mabcdefgh\e[32mabcdefgh\e[33mabcdefgh\e[34mabcdefgh\e[35mabcdefgh\e[36mabcdefgh\e[37mabcdefgh\e[30;1mabcdefgh\e[31;1mabcdefgh\e[32;1mabcdefgh\e[33;1mabcdefgh\e[34;1mabcdefgh\e[35;1mabcdefgh\e[36;1mabcdefgh\e[37;1mabcdefgh\e[mXXXXXX\e[40mabcdefgh\e[41mabcdefgh\e[42mabcdefgh\e[43mabcdefgh\e[44mabcdefgh\e[45mabcdefgh\e[46mabcdefgh\e[47mabcdefgh\e[40;1mabcdefgh\e[41;1mabcdefgh\e[42;1mabcdefgh\e[43;1mabcdefgh\e[44;1mabcdefgh\e[45;1mabcdefgh\e[46;1mabcdefgh\e[47;1mabcdefgh\e[mXXXXXX\e[31;42mabcdefgh\e[30;42mabcdefgh"];
 		// [receiver showContent:@"MMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHH\n国国国国国同同同同同国国国国国同同同同同国国国国国同同同同同国国国国国同同同同同"];
@@ -204,19 +198,6 @@ static NSString *reqString = @"iWell_Req";
 
 #pragma mark - Private Methods
 
-- (void)OAuthWithUserInfo
-{
-	if (self.stage != BBS_OAUTH_ACCESS) return;
-	self.stage = BBS_OAUTH_ACCESS_RECV;
-	NSString *path = @"/auth/authpage";
-	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
-	[data setValue:@"displaycode" forKey:@"redirect_uri"];
-	[data setValue:@"1" forKey:@"client_id"];
-	[data setValue:self.username forKey:@"name"];
-	[data setValue:self.password forKey:@"pass"];
-	[self.netCore post:[NSURL URLWithString:path relativeToURL:self.baseURL] Data:data];
-}
-
 - (void)OAuthWithToken
 {
 	if (self.stage != BBS_OAUTH_SESSION) return;
@@ -246,21 +227,15 @@ static NSString *reqString = @"iWell_Req";
 	@autoreleasepool {
 		while (self.stage != BBS_IDLE) {
 			switch (self.stage) {
-				case BBS_OAUTH_ACCESS:
-				{
-					[self.delegate printContent:@"CONNECTING ..."];
-					[self OAuthWithUserInfo];
-					break;
-				}
 				case BBS_OAUTH_SESSION:
 				{
-					[self.delegate printContent:@"LOGGING IN ..."];
+					//	[self.delegate printContent:@"LOGGING IN ..."];
 					[self OAuthWithToken];
 					break;
 				}
 				case BBS_OAUTH_VERIFY:
 				{
-					[self.delegate printContent:@"RESUMING ..."];
+					//	[self.delegate printContent:@"RESUMING ..."];
 					[self OAuthVerify];
 					break;
 				}
@@ -323,23 +298,6 @@ static NSString *reqString = @"iWell_Req";
 		}
 	} else {
 		switch (self.stage) {
-			case BBS_OAUTH_ACCESS_RECV:
-			{
-				// Your authorization code is: <b>XXXXXXXX</b>
-				NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-				NSRange range1 = [dataString rangeOfString:@"code is: <b>"];
-				range1.location += 12;
-				if (range1.length == 0) {
-					self.stage = BBS_IDLE;
-					[self.delegate printContent:@"OAUTH ERROR"];
-					goto wakeup;
-				}
-				NSRange range2 = [dataString rangeOfString:@"<" options:0 range:range1];
-				range1.length = range2.location - range1.location;
-				self.authorizationToken = [dataString substringWithRange:range1];
-				self.stage = BBS_OAUTH_SESSION;
-				return;
-			}
 			case BBS_OAUTH_SESSION_RECV:
 			{
 				// {"access_token": <string: Token>, "token_type": <string: Token type>}
@@ -351,7 +309,7 @@ static NSString *reqString = @"iWell_Req";
 						if (value != nil) {
 							self.sessionToken = value;
 							self.stage = BBS_ONLINE;
-							[self.delegate printContent:@"READY"];
+							//	[self.delegate printContent:@"READY"];
 							[self.delegate online:value];
 							return;
 						}
@@ -369,7 +327,7 @@ static NSString *reqString = @"iWell_Req";
 					NSString *value = [(NSDictionary *)dict objectForKey:@"status"];
 					if (value != nil && [value isEqualToString:@"ok"]) {
 						self.stage = BBS_ONLINE;
-						[self.delegate printContent:@"READY"];
+						//	[self.delegate printContent:@"READY"];
 						[self.delegate online:self.sessionToken];
 						return;
 					}

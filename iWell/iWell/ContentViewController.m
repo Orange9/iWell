@@ -6,17 +6,17 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "DetailViewController.h"
+#import "ContentViewController.h"
 
-#import "PostViewController.h"
+#import "PostEditViewController.h"
 
-@interface DetailViewController ()
+@interface ContentViewController ()
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 
 - (void)reply;
 @end
 
-@implementation DetailViewController
+@implementation ContentViewController
 
 @synthesize isPad;
 @synthesize contentText;
@@ -47,15 +47,9 @@
 	self.contentText.converter.charCountInLine = count;
 }
 
-- (void)viewDidUnload
+- (NSUInteger)supportedInterfaceOrientations
 {
-	[super viewDidUnload];
-	// Release any retained subviews of the main view.
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-	return YES;
+	return UIInterfaceOrientationMaskAll;
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -77,7 +71,7 @@
 {
 	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 	if (self) {
-		self.title = NSLocalizedString(@"Detail", @"Detail");
+		self.title = NSLocalizedString(@"Content", @"Content");
 	}
 	return self;
 }
@@ -86,7 +80,7 @@
 
 - (void)splitViewController:(UISplitViewController *)splitController willHideViewController:(UIViewController *)viewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)popoverController
 {
-	barButtonItem.title = NSLocalizedString(@"Master", @"Master");
+	barButtonItem.title = NSLocalizedString(@"Board", @"Board");
 	[self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
 	self.masterPopoverController = popoverController;
 }
@@ -111,15 +105,11 @@
 
 - (void)reply
 {
-	if (!isPad) {
-		if (self.core.postInput == nil) {
-			self.core.postInput = [[PostViewController alloc] initWithNibName:@"PostViewController_iPhone" bundle:nil];
-		}
-	}
+	[self.navigationController pushViewController:self.core.postInput animated:YES];
+	self.core.postInput.core = self.core;
 	self.core.postInput.board = self.board;
 	self.core.postInput.postid = self.postid;
 	self.core.postInput.xid = self.xid;
-	[self.navigationController pushViewController:self.core.postInput animated:YES];
 	[self.core viewQuoteOfPost:self.postid onBoard:self.board WithXID:self.xid];
 }
 

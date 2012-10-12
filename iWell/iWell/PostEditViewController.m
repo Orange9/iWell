@@ -6,19 +6,19 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "PostViewController.h"
+#import "PostEditViewController.h"
 
-@interface PostViewController ()
+@interface PostEditViewController ()
 {
 	id textInput;
 }
 
 @end
 
-@implementation PostViewController
+@implementation PostEditViewController
 @synthesize titleInput;
 @synthesize contentInput;
-@synthesize core;
+@synthesize core = _core;
 @synthesize board;
 @synthesize postid;
 @synthesize xid;
@@ -40,17 +40,9 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHideNotification:) name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void)viewDidUnload
+- (NSUInteger)supportedInterfaceOrientations
 {
-	[self setTitleInput:nil];
-	[self setContentInput:nil];
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return YES;
+	return UIInterfaceOrientationMaskAll;
 }
 
 - (void)post

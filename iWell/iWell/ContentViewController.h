@@ -10,14 +10,14 @@
 
 #import "Core.h"
 
-@interface DetailViewController : UIViewController <UISplitViewControllerDelegate>
+@interface ContentViewController : UIViewController <UISplitViewControllerDelegate>
 
 @property (assign, nonatomic) BOOL isPad;
 
 @property (strong, nonatomic) IBOutlet View *contentText;
 
-@property (strong, nonatomic) UISwipeGestureRecognizer *swipeLeft;
-@property (strong, nonatomic) UISwipeGestureRecognizer *swipeRight;
+@property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *swipeLeft;
+@property (strong, nonatomic) IBOutlet UISwipeGestureRecognizer *swipeRight;
 
 @property (retain, nonatomic) Core *core;
 

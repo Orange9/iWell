@@ -10,7 +10,7 @@
 
 #import "Core.h"
 
-@interface PostViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate>
+@interface PostEditViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate>
 @property (strong, nonatomic) IBOutlet UITextField *titleInput;
 @property (strong, nonatomic) IBOutlet UITextView *contentInput;
 

@@ -8,11 +8,11 @@
 
 #import "AppDelegate.h"
 
-#import "MasterViewController.h"
+#import "BoardsViewController.h"
 
-#import "DetailViewController.h"
+#import "ContentViewController.h"
 
-#import "PostViewController.h"
+#import "PostEditViewController.h"
 
 #import "Core.h"
 
@@ -28,45 +28,50 @@
 	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	self.core = [[Core alloc] init];
 	// Override point for customization after application launch.
-	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-		MasterViewController *masterViewController = [[MasterViewController alloc] initWithNibName:@"MasterViewController_iPhone" bundle:nil];
-		self.navigationController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
+	UIDevice *device = [UIDevice currentDevice];
+	if ([device userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+		BoardsViewController *boardsViewController = [[BoardsViewController alloc] initWithNibName:@"ListViewController_iPhone" bundle:nil];
+		self.navigationController = [[UINavigationController alloc] initWithRootViewController:boardsViewController];
 		self.window.rootViewController = self.navigationController;
 		
-		masterViewController.core = self.core;
-		masterViewController.isPad = NO;
-		masterViewController.isBoards = YES;
-		masterViewController.isFavorite = YES;
-		self.core.boardsOutput = masterViewController;
-		self.core.isOAuth = YES;
-	} else {
-		MasterViewController *masterViewController = [[MasterViewController alloc] initWithNibName:@"MasterViewController_iPad" bundle:nil];
-		UINavigationController *masterNavigationController = [[UINavigationController alloc] initWithRootViewController:masterViewController];
+		ContentViewController *contentViewController = [[ContentViewController alloc] initWithNibName:@"ContentViewController_iPhone" bundle:nil];
+		PostEditViewController *postEditViewController = [[PostEditViewController alloc] initWithNibName:@"PostEditViewController_iPhone" bundle:nil];
 		
-		DetailViewController *detailViewController = [[DetailViewController alloc] initWithNibName:@"DetailViewController_iPad" bundle:nil];
-		UINavigationController *detailNavigationController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
+		boardsViewController.core = self.core;
+		boardsViewController.isPad = NO;
+		boardsViewController.type = LIST_FAV;
+		contentViewController.core = self.core;
+		contentViewController.isPad = NO;
+		postEditViewController.core = self.core;
+		self.core.boardsOutput = boardsViewController;
+		self.core.contentOutput = contentViewController;
+		self.core.postInput = postEditViewController;
+	} else {
+		BoardsViewController *boardsViewController = [[BoardsViewController alloc] initWithNibName:@"ListViewController_iPad" bundle:nil];
+		UINavigationController *masterNavigationController = [[UINavigationController alloc] initWithRootViewController:boardsViewController];
+		
+		ContentViewController *contentViewController = [[ContentViewController alloc] initWithNibName:@"ContentViewController_iPad" bundle:nil];
+		UINavigationController *detailNavigationController = [[UINavigationController alloc] initWithRootViewController:contentViewController];
 		
 		self.splitViewController = [[UISplitViewController alloc] init];
-		self.splitViewController.delegate = detailViewController;
+		self.splitViewController.delegate = contentViewController;
 		self.splitViewController.viewControllers = [NSArray arrayWithObjects:masterNavigationController, detailNavigationController, nil];
 		self.splitViewController.presentsWithGesture = NO;
 		
 		self.window.rootViewController = self.splitViewController;
 		
-		PostViewController *postViewController = [[PostViewController alloc] initWithNibName:@"PostViewController_iPad" bundle:nil];
+		PostEditViewController *postEditViewController = [[PostEditViewController alloc] initWithNibName:@"PostEditViewController_iPad" bundle:nil];
 		
-		masterViewController.core = self.core;
-		masterViewController.isPad = YES;
-		masterViewController.isBoards = YES;
-		masterViewController.isFavorite = YES;
-		detailViewController.core = self.core;
-		detailViewController.isPad = YES;
-		postViewController.core = self.core;
-		self.core.boardsOutput = masterViewController;
-		self.core.contentOutput = detailViewController;
-		self.core.postInput = postViewController;
-		self.core.isOAuth = YES;
-		View *view = (View *)detailViewController.view;
+		boardsViewController.core = self.core;
+		boardsViewController.isPad = YES;
+		boardsViewController.type = LIST_FAV;
+		contentViewController.core = self.core;
+		contentViewController.isPad = YES;
+		postEditViewController.core = self.core;
+		self.core.boardsOutput = boardsViewController;
+		self.core.contentOutput = contentViewController;
+		self.core.postInput = postEditViewController;
+		View *view = (View *)contentViewController.view;
 		view.converter.charCountInLine = 80;
 	}
 	if ([launchOptions valueForKey:UIApplicationLaunchOptionsURLKey] == nil) {

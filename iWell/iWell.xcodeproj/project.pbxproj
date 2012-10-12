@@ -37,19 +37,20 @@
 		B43D751B1574F09200F584A4 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = B43D750C1574F09200F584A4 /* SBJsonWriter.m */; };
 		B43D751C1574F09200F584A4 /* StringConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = B43D750E1574F09200F584A4 /* StringConverter.m */; };
 		B43D75251574F0C100F584A4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B43D751E1574F0C100F584A4 /* AppDelegate.m */; };
-		B43D75261574F0C100F584A4 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B43D75201574F0C100F584A4 /* DetailViewController.m */; };
-		B43D75271574F0C100F584A4 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B43D75221574F0C100F584A4 /* LoginViewController.m */; };
-		B43D75281574F0C100F584A4 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B43D75241574F0C100F584A4 /* MasterViewController.m */; };
-		B43D75371574F14000F584A4 /* DetailViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B43D752D1574F14000F584A4 /* DetailViewController_iPad.xib */; };
-		B43D75381574F14000F584A4 /* DetailViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = B43D752F1574F14000F584A4 /* DetailViewController_iPhone.xib */; };
-		B43D75391574F14000F584A4 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B43D75311574F14000F584A4 /* LoginViewController.xib */; };
-		B43D753A1574F14000F584A4 /* MasterViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B43D75331574F14000F584A4 /* MasterViewController_iPad.xib */; };
-		B43D753B1574F14000F584A4 /* MasterViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = B43D75351574F14000F584A4 /* MasterViewController_iPhone.xib */; };
+		B43D75261574F0C100F584A4 /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B43D75201574F0C100F584A4 /* ContentViewController.m */; };
+		B43D75281574F0C100F584A4 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B43D75241574F0C100F584A4 /* ListViewController.m */; };
+		B43D75371574F14000F584A4 /* ContentViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B43D752D1574F14000F584A4 /* ContentViewController_iPad.xib */; };
+		B43D75381574F14000F584A4 /* ContentViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = B43D752F1574F14000F584A4 /* ContentViewController_iPhone.xib */; };
+		B43D753A1574F14000F584A4 /* ListViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B43D75331574F14000F584A4 /* ListViewController_iPad.xib */; };
+		B43D753B1574F14000F584A4 /* ListViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = B43D75351574F14000F584A4 /* ListViewController_iPhone.xib */; };
 		B43D75471574F2E500F584A4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B43D75461574F2E500F584A4 /* CoreText.framework */; };
 		B43D75491574F2F800F584A4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B43D75481574F2F800F584A4 /* Security.framework */; };
-		B4FF4D161577C8C80080C918 /* PostViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = B4FF4D141577C8C70080C918 /* PostViewController_iPhone.xib */; };
-		B4FF4D191577D27C0080C918 /* PostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4FF4D181577D27B0080C918 /* PostViewController.m */; };
-		B4FF4D1C1577EAA70080C918 /* PostViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B4FF4D1A1577EAA70080C918 /* PostViewController_iPad.xib */; };
+		B4947B6F1624F10D00FB7607 /* PostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4947B6E1624F10D00FB7607 /* PostsViewController.m */; };
+		B4947B721624F22B00FB7607 /* BoardsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4947B711624F22B00FB7607 /* BoardsViewController.m */; };
+		B4947B751624F28400FB7607 /* DigestsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4947B741624F28400FB7607 /* DigestsViewController.m */; };
+		B4FF4D161577C8C80080C918 /* PostEditViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = B4FF4D141577C8C70080C918 /* PostEditViewController_iPhone.xib */; };
+		B4FF4D191577D27C0080C918 /* PostEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4FF4D181577D27B0080C918 /* PostEditViewController.m */; };
+		B4FF4D1C1577EAA70080C918 /* PostEditViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = B4FF4D1A1577EAA70080C918 /* PostEditViewController_iPad.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,23 +115,26 @@
 		B43D750E1574F09200F584A4 /* StringConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringConverter.m; sourceTree = "<group>"; };
 		B43D751D1574F0C100F584A4 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B43D751E1574F0C100F584A4 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		B43D751F1574F0C100F584A4 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
-		B43D75201574F0C100F584A4 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
-		B43D75211574F0C100F584A4 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
-		B43D75221574F0C100F584A4 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		B43D75231574F0C100F584A4 /* MasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
-		B43D75241574F0C100F584A4 /* MasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
-		B43D752E1574F14000F584A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DetailViewController_iPad.xib; sourceTree = "<group>"; };
-		B43D75301574F14000F584A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DetailViewController_iPhone.xib; sourceTree = "<group>"; };
-		B43D75321574F14000F584A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LoginViewController.xib; sourceTree = "<group>"; };
-		B43D75341574F14000F584A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MasterViewController_iPad.xib; sourceTree = "<group>"; };
-		B43D75361574F14000F584A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MasterViewController_iPhone.xib; sourceTree = "<group>"; };
+		B43D751F1574F0C100F584A4 /* ContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentViewController.h; sourceTree = "<group>"; };
+		B43D75201574F0C100F584A4 /* ContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentViewController.m; sourceTree = "<group>"; };
+		B43D75231574F0C100F584A4 /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
+		B43D75241574F0C100F584A4 /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
+		B43D752E1574F14000F584A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ContentViewController_iPad.xib; sourceTree = "<group>"; };
+		B43D75301574F14000F584A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ContentViewController_iPhone.xib; sourceTree = "<group>"; };
+		B43D75341574F14000F584A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ListViewController_iPad.xib; sourceTree = "<group>"; };
+		B43D75361574F14000F584A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ListViewController_iPhone.xib; sourceTree = "<group>"; };
 		B43D75461574F2E500F584A4 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		B43D75481574F2F800F584A4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		B4FF4D151577C8C80080C918 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/PostViewController_iPhone.xib; sourceTree = "<group>"; };
-		B4FF4D171577D27B0080C918 /* PostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostViewController.h; sourceTree = "<group>"; };
-		B4FF4D181577D27B0080C918 /* PostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostViewController.m; sourceTree = "<group>"; };
-		B4FF4D1B1577EAA70080C918 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/PostViewController_iPad.xib; sourceTree = "<group>"; };
+		B4947B6D1624F10C00FB7607 /* PostsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostsViewController.h; sourceTree = "<group>"; };
+		B4947B6E1624F10D00FB7607 /* PostsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostsViewController.m; sourceTree = "<group>"; };
+		B4947B701624F22B00FB7607 /* BoardsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoardsViewController.h; sourceTree = "<group>"; };
+		B4947B711624F22B00FB7607 /* BoardsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoardsViewController.m; sourceTree = "<group>"; };
+		B4947B731624F28400FB7607 /* DigestsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DigestsViewController.h; sourceTree = "<group>"; };
+		B4947B741624F28400FB7607 /* DigestsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DigestsViewController.m; sourceTree = "<group>"; };
+		B4FF4D151577C8C80080C918 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/PostEditViewController_iPhone.xib; sourceTree = "<group>"; };
+		B4FF4D171577D27B0080C918 /* PostEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostEditViewController.h; sourceTree = "<group>"; };
+		B4FF4D181577D27B0080C918 /* PostEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostEditViewController.m; sourceTree = "<group>"; };
+		B4FF4D1B1577EAA70080C918 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/PostEditViewController_iPad.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,21 +203,24 @@
 			children = (
 				B43D751D1574F0C100F584A4 /* AppDelegate.h */,
 				B43D751E1574F0C100F584A4 /* AppDelegate.m */,
-				B43D75231574F0C100F584A4 /* MasterViewController.h */,
-				B43D75241574F0C100F584A4 /* MasterViewController.m */,
-				B43D751F1574F0C100F584A4 /* DetailViewController.h */,
-				B43D75201574F0C100F584A4 /* DetailViewController.m */,
-				B43D75211574F0C100F584A4 /* LoginViewController.h */,
-				B43D75221574F0C100F584A4 /* LoginViewController.m */,
-				B4FF4D171577D27B0080C918 /* PostViewController.h */,
-				B4FF4D181577D27B0080C918 /* PostViewController.m */,
-				B43D75331574F14000F584A4 /* MasterViewController_iPad.xib */,
-				B43D75351574F14000F584A4 /* MasterViewController_iPhone.xib */,
-				B43D752D1574F14000F584A4 /* DetailViewController_iPad.xib */,
-				B43D752F1574F14000F584A4 /* DetailViewController_iPhone.xib */,
-				B43D75311574F14000F584A4 /* LoginViewController.xib */,
-				B4FF4D141577C8C70080C918 /* PostViewController_iPhone.xib */,
-				B4FF4D1A1577EAA70080C918 /* PostViewController_iPad.xib */,
+				B43D75231574F0C100F584A4 /* ListViewController.h */,
+				B43D75241574F0C100F584A4 /* ListViewController.m */,
+				B4947B701624F22B00FB7607 /* BoardsViewController.h */,
+				B4947B711624F22B00FB7607 /* BoardsViewController.m */,
+				B4947B6D1624F10C00FB7607 /* PostsViewController.h */,
+				B4947B6E1624F10D00FB7607 /* PostsViewController.m */,
+				B4947B731624F28400FB7607 /* DigestsViewController.h */,
+				B4947B741624F28400FB7607 /* DigestsViewController.m */,
+				B43D751F1574F0C100F584A4 /* ContentViewController.h */,
+				B43D75201574F0C100F584A4 /* ContentViewController.m */,
+				B4FF4D171577D27B0080C918 /* PostEditViewController.h */,
+				B4FF4D181577D27B0080C918 /* PostEditViewController.m */,
+				B43D75331574F14000F584A4 /* ListViewController_iPad.xib */,
+				B43D75351574F14000F584A4 /* ListViewController_iPhone.xib */,
+				B43D752D1574F14000F584A4 /* ContentViewController_iPad.xib */,
+				B43D752F1574F14000F584A4 /* ContentViewController_iPhone.xib */,
+				B4FF4D141577C8C70080C918 /* PostEditViewController_iPhone.xib */,
+				B4FF4D1A1577EAA70080C918 /* PostEditViewController_iPad.xib */,
 				B43D74F01574F09200F584A4 /* Utils */,
 				B43D74E61574F07A00F584A4 /* Core */,
 				B43D74BE1574F02600F584A4 /* Supporting Files */,
@@ -360,13 +367,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				B43D74C21574F02600F584A4 /* InfoPlist.strings in Resources */,
-				B43D75371574F14000F584A4 /* DetailViewController_iPad.xib in Resources */,
-				B43D75381574F14000F584A4 /* DetailViewController_iPhone.xib in Resources */,
-				B43D75391574F14000F584A4 /* LoginViewController.xib in Resources */,
-				B43D753A1574F14000F584A4 /* MasterViewController_iPad.xib in Resources */,
-				B43D753B1574F14000F584A4 /* MasterViewController_iPhone.xib in Resources */,
-				B4FF4D161577C8C80080C918 /* PostViewController_iPhone.xib in Resources */,
-				B4FF4D1C1577EAA70080C918 /* PostViewController_iPad.xib in Resources */,
+				B43D75371574F14000F584A4 /* ContentViewController_iPad.xib in Resources */,
+				B43D75381574F14000F584A4 /* ContentViewController_iPhone.xib in Resources */,
+				B43D753A1574F14000F584A4 /* ListViewController_iPad.xib in Resources */,
+				B43D753B1574F14000F584A4 /* ListViewController_iPhone.xib in Resources */,
+				B4FF4D161577C8C80080C918 /* PostEditViewController_iPhone.xib in Resources */,
+				B4FF4D1C1577EAA70080C918 /* PostEditViewController_iPad.xib in Resources */,
 				B42FE3B01578A7A200E23B89 /* Icon-72.png in Resources */,
 				B42FE3B21578A7AF00E23B89 /* Icon.png in Resources */,
 				B42FE3B41578A7B300E23B89 /* Icon@2x.png in Resources */,
@@ -423,10 +429,12 @@
 				B43D751B1574F09200F584A4 /* SBJsonWriter.m in Sources */,
 				B43D751C1574F09200F584A4 /* StringConverter.m in Sources */,
 				B43D75251574F0C100F584A4 /* AppDelegate.m in Sources */,
-				B43D75261574F0C100F584A4 /* DetailViewController.m in Sources */,
-				B43D75271574F0C100F584A4 /* LoginViewController.m in Sources */,
-				B43D75281574F0C100F584A4 /* MasterViewController.m in Sources */,
-				B4FF4D191577D27C0080C918 /* PostViewController.m in Sources */,
+				B43D75261574F0C100F584A4 /* ContentViewController.m in Sources */,
+				B43D75281574F0C100F584A4 /* ListViewController.m in Sources */,
+				B4FF4D191577D27C0080C918 /* PostEditViewController.m in Sources */,
+				B4947B6F1624F10D00FB7607 /* PostsViewController.m in Sources */,
+				B4947B721624F22B00FB7607 /* BoardsViewController.m in Sources */,
+				B4947B751624F28400FB7607 /* DigestsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -456,60 +464,52 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		B43D752D1574F14000F584A4 /* DetailViewController_iPad.xib */ = {
+		B43D752D1574F14000F584A4 /* ContentViewController_iPad.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				B43D752E1574F14000F584A4 /* en */,
 			);
-			name = DetailViewController_iPad.xib;
+			name = ContentViewController_iPad.xib;
 			sourceTree = "<group>";
 		};
-		B43D752F1574F14000F584A4 /* DetailViewController_iPhone.xib */ = {
+		B43D752F1574F14000F584A4 /* ContentViewController_iPhone.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				B43D75301574F14000F584A4 /* en */,
 			);
-			name = DetailViewController_iPhone.xib;
+			name = ContentViewController_iPhone.xib;
 			sourceTree = "<group>";
 		};
-		B43D75311574F14000F584A4 /* LoginViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B43D75321574F14000F584A4 /* en */,
-			);
-			name = LoginViewController.xib;
-			sourceTree = "<group>";
-		};
-		B43D75331574F14000F584A4 /* MasterViewController_iPad.xib */ = {
+		B43D75331574F14000F584A4 /* ListViewController_iPad.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				B43D75341574F14000F584A4 /* en */,
 			);
-			name = MasterViewController_iPad.xib;
+			name = ListViewController_iPad.xib;
 			sourceTree = "<group>";
 		};
-		B43D75351574F14000F584A4 /* MasterViewController_iPhone.xib */ = {
+		B43D75351574F14000F584A4 /* ListViewController_iPhone.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				B43D75361574F14000F584A4 /* en */,
 			);
-			name = MasterViewController_iPhone.xib;
+			name = ListViewController_iPhone.xib;
 			sourceTree = "<group>";
 		};
-		B4FF4D141577C8C70080C918 /* PostViewController_iPhone.xib */ = {
+		B4FF4D141577C8C70080C918 /* PostEditViewController_iPhone.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				B4FF4D151577C8C80080C918 /* en */,
 			);
-			name = PostViewController_iPhone.xib;
+			name = PostEditViewController_iPhone.xib;
 			sourceTree = "<group>";
 		};
-		B4FF4D1A1577EAA70080C918 /* PostViewController_iPad.xib */ = {
+		B4FF4D1A1577EAA70080C918 /* PostEditViewController_iPad.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				B4FF4D1B1577EAA70080C918 /* en */,
 			);
-			name = PostViewController_iPad.xib;
+			name = PostEditViewController_iPad.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -519,10 +519,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_BIT)",
-					armv6,
-				);
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -531,20 +527,16 @@
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Weiyi Wu (ZVC3G9RYZN)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
@@ -566,10 +558,8 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
-				PROVISIONING_PROFILE = "80843B31-1CE5-430C-8801-84F3FC5137FA";
+				PROVISIONING_PROFILE = "FD4A2CEE-7BB2-4FB4-B011-A9C8296DD60E";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -577,10 +567,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					"$(ARCHS_STANDARD_32_BIT)",
-					armv6,
-				);
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -588,14 +574,11 @@
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Weiyi Wu";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Weiyi Wu (ZVC3G9RYZN)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_THUMB_SUPPORT = NO;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_INCOMPATIBLE_POINTER_TYPE_WARNINGS_AS_ERRORS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
@@ -617,11 +600,9 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "0C1FBAD5-C4F2-43C9-BBCC-6F74C3ECAF94";
+				PROVISIONING_PROFILE = "FD4A2CEE-7BB2-4FB4-B011-A9C8296DD60E";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -633,8 +614,9 @@
 				GCC_PREFIX_HEADER = "iWell/iWell-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "iWell/iWell-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -646,8 +628,9 @@
 				GCC_PREFIX_HEADER = "iWell/iWell-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "iWell/iWell-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

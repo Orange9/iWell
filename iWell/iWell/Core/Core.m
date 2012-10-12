@@ -8,10 +8,10 @@
 
 #import "Core.h"
 
-#import "MasterViewController.h"
-#import "DetailViewController.h"
-#import "LoginViewController.h"
-#import "PostViewController.h"
+#import "BoardsViewController.h"
+#import "PostsViewController.h"
+#import "ContentViewController.h"
+#import "PostEditViewController.h"
 
 @interface Core ()
 @property (strong, nonatomic) BBSCore *bbsCore;
@@ -26,15 +26,12 @@
 @property (strong, nonatomic) NSString *title;
 
 - (void)saveAddress:(NSString *)address;
-- (void)saveUsername:(NSString *)username;
-- (void)savePassword:(NSString *)password;
 - (void)saveToken:(NSString *)token;
-- (void)popLoginView;
 - (void)setContentTitle;
 - (void)setContent;
 - (void)setQuote:(NSString *)content;
 - (void)setQuoteTitle:(NSString *)title;
-- (void)reloadPosts:(MasterViewController *)postsViewController;
+- (void)reloadPosts:(ListViewController *)postsViewController;
 - (void)reloadBoards;
 
 @end
@@ -50,11 +47,9 @@
 @synthesize board = _board;
 @synthesize title = _title;
 @synthesize boardsOutput = _boardsOutput;
-@synthesize postsOutputs = _postsOutputs;
 @synthesize contentOutput = _contentOutput;
 @synthesize postInput = _postInput;
 @synthesize loginInput = _loginInput;
-@synthesize isOAuth = _isOAuth;
 
 #pragma mark - Public Methods
 
@@ -65,8 +60,6 @@
 	self.bbsCore = [[BBSCore alloc] init];
 	self.bbsCore.delegate = self;
 	self.bbsCore.baseURL = [NSURL URLWithString:[self.preferenceStorage valueForKey:@"address"]];
-	self.bbsCore.username = [self.preferenceStorage valueForKey:@"username"];
-	self.bbsCore.password = [self.preferenceStorage valueForKey:@"password"];
 	self.bbsCore.sessionToken = [self.preferenceStorage valueForKey:@"token"];
 	self.boards = [NSMutableArray array];
 	self.posts = [NSMutableDictionary dictionary];
@@ -74,7 +67,6 @@
 	self.index = -1;
 	
 	self.boardsOutput = nil;
-	self.postsOutputs = [NSMutableDictionary dictionary];
 	self.contentOutput = nil;
 	
 	//[self.bbsCore connectWithStage:BBS_OAUTH_VERIFY];
@@ -84,16 +76,6 @@
 - (NSString *)address
 {
 	return [self.bbsCore.baseURL absoluteString];
-}
-
-- (NSString *)username
-{
-	return self.bbsCore.username;
-}
-
-- (NSString *)password
-{
-	return self.bbsCore.password;
 }
 
 - (NSDictionary *)boardInfoAtIndex:(NSUInteger)index
@@ -164,7 +146,7 @@
 	[posts replaceObjectAtIndex:index withObject:dict];
 	self.index = index;
 	
-	MasterViewController *postsViewController = [self.postsOutputs valueForKey:board];
+	PostsViewController *postsViewController = [self.boardsOutput.postsViewControllers valueForKey:board];
 	[self performSelectorOnMainThread:@selector(reloadPosts:) withObject:postsViewController waitUntilDone:YES];
 	return [postid unsignedIntegerValue];
 }
@@ -208,23 +190,20 @@
 	[self.bbsCore OAuth];
 }
 
-- (void)connect:(NSString *)address withUsername:(NSString *)username Password:(NSString *)password
-{
-	[self saveAddress:address];
-	[self saveUsername:username];
-	[self savePassword:password];
-	[self.bbsCore connectWithStage:BBS_OAUTH_ACCESS];
-}
-
 - (void)connectWithToken:(NSString *)token
 {
 	self.bbsCore.authorizationToken = token;
+	[self.boardsOutput.busyIndicator startAnimating];
 	[self.bbsCore connectWithStage:BBS_OAUTH_SESSION];
 }
 
 - (void)resume
 {
-	[self.bbsCore connectWithStage:BBS_OAUTH_VERIFY];
+	if (self.bbsCore.sessionToken.length) {
+		[self.bbsCore connectWithStage:BBS_OAUTH_VERIFY];
+	} else {
+		[self.boardsOutput performSelectorOnMainThread:@selector(connect) withObject:nil waitUntilDone:YES];
+	}
 }
 
 - (void)listBoards
@@ -240,7 +219,6 @@
 - (void)listPostsOfBoard:(NSString *)board
 {
 	self.index = -1;
-	MasterViewController *postViewController = [self.postsOutputs valueForKey:board];
 	[self.bbsCore listPostsInRange:NSMakeRange(0, 20) onBoard:board];
 }
 
@@ -281,8 +259,8 @@
 	if (self.index <= 0) return;
 	NSUInteger postid = [self postIDAtIndex:(NSUInteger)self.index - 1 onBoard:self.board];
 	[self viewContentOfPost:postid onBoard:self.board];
-	MasterViewController *postsViewController = [self.postsOutputs objectForKey:self.board];
-	NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.index inSection:1];
+	PostsViewController *postsViewController = [self.boardsOutput.postsViewControllers objectForKey:self.board];
+	NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.index inSection:2];
 	[postsViewController.tableView selectRowAtIndexPath:indexpath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
 }
 
@@ -290,8 +268,8 @@
 	if (self.index >= (NSInteger)[self postsCountOnBoard:self.board] - 1) return;
 	NSUInteger postid = [self postIDAtIndex:(NSUInteger)self.index + 1 onBoard:self.board];
 	[self viewContentOfPost:postid onBoard:self.board];
-	MasterViewController *postsViewController = [self.postsOutputs objectForKey:self.board];
-	NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.index inSection:1];
+	PostsViewController *postsViewController = [self.boardsOutput.postsViewControllers objectForKey:self.board];
+	NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.index inSection:2];
 	[postsViewController.tableView selectRowAtIndexPath:indexpath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
 }
 
@@ -316,33 +294,12 @@
 	[self.preferenceStorage setValue:address forKey:@"address"];
 }
 
-- (void)saveUsername:(NSString *)username
-{
-	if (![self.bbsCore.username isEqualToString:username]) {
-		self.bbsCore.username = username;
-	}
-	[self.preferenceStorage setValue:username forKey:@"username"];
-}
-
-- (void)savePassword:(NSString *)password
-{
-	if (![self.bbsCore.password isEqualToString:password]) {
-		self.bbsCore.password = password;
-	}
-	[self.preferenceStorage setValue:password forKey:@"password"];
-}
-
 - (void)saveToken:(NSString *)token
 {
 	if (![self.bbsCore.sessionToken isEqualToString:token]) {
 		self.bbsCore.sessionToken = token;
 	}
 	[self.preferenceStorage setValue:token forKey:@"token"];
-}
-
-- (void)popLoginView
-{
-	[self.loginInput.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)setContentTitle
@@ -374,13 +331,14 @@
 	[self.postInput.titleInput setText:title];
 }
 
-- (void)reloadPosts:(MasterViewController *)postsViewController
+- (void)reloadPosts:(ListViewController *)postsViewController
 {
 	[postsViewController.tableView reloadData];
 	if (self.index >= 0) {
-		NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.index inSection:1];
+		NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.index inSection:2];
 		[postsViewController.tableView selectRowAtIndexPath:indexpath animated:YES scrollPosition:UITableViewScrollPositionNone];
 	}
+	[postsViewController.busyIndicator stopAnimating];
 }
 
 - (void)reloadBoards
@@ -390,24 +348,20 @@
 		NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.bIndex inSection:0];
 		[self.boardsOutput.tableView selectRowAtIndexPath:indexpath animated:YES scrollPosition:UITableViewScrollPositionNone];
 	}
+	[self.boardsOutput.busyIndicator stopAnimating];
 }
 
 #pragma mark - Delegate Methods
 
 - (void)online:(NSString *)token
 {
-	if (!self.isOAuth) {
-		[self performSelectorOnMainThread:@selector(popLoginView) withObject:nil waitUntilDone:YES];
-	} else {
-		[self.boardsOutput viewWillAppear:YES];
-	}
+	[self.boardsOutput viewWillAppear:YES];
 	[self.preferenceStorage setValue:token forKey:@"token"];
 }
 
 - (void)printContent:(NSString *)content
 {
-	self.title = content;
-	[self performSelectorOnMainThread:@selector(setContentTitle) withObject:nil waitUntilDone:YES];
+	[[[UIAlertView alloc] initWithTitle:@"Error!" message:content delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 }
 
 - (void)showContent:(NSDictionary *)content onBoard:(NSString *)board
@@ -457,7 +411,7 @@
 - (void)showPosts:(NSArray *)posts onBoard:(NSString *)board
 {
 	if ([posts count] == 0) return;
-	MasterViewController *postsViewController = [self.postsOutputs valueForKey:board];
+	PostsViewController *postsViewController = [self.boardsOutput.postsViewControllers valueForKey:board];
 	NSUInteger start = 0, end = 0, importstart = 0, importend = 0;
 	NSMutableArray *list = [self.posts valueForKey:board];
 	if (list == nil) {

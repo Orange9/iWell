@@ -10,12 +10,11 @@
 
 #import "Core.h"
 
-@interface MasterViewController : UITableViewController
+@interface ListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *busyIndicator;
 
 @property (assign, nonatomic) BOOL isPad; // pad or phone
-
-@property (assign, nonatomic) BOOL isBoards; // borads or posts
-@property (assign, nonatomic) BOOL isFavorite; // favorite or all
 
 @property (retain, nonatomic) Core *core;
 

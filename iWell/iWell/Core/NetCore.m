@@ -98,6 +98,7 @@ static NSString *methodString[] = { @"GET", @"POST" };
 		[request setHTTPBody:postData];
 	} else if (method == HTTP_EXTERNAL) {
 		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", [url absoluteString], dataString]]];
+		return nil;
 	}
 	
 	Connection *connection = [[Connection alloc] initWithRequest:request delegate:self startImmediately:NO];
