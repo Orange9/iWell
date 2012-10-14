@@ -13,9 +13,6 @@
 
 @interface ListViewController ()
 
-- (void)changeMode;
-- (void)connect;
-- (void)post;
 @end
 
 @implementation ListViewController

@@ -71,7 +71,7 @@
 		self.core.boardsOutput = boardsViewController;
 		self.core.contentOutput = contentViewController;
 		self.core.postInput = postEditViewController;
-		View *view = (View *)contentViewController.view;
+		ContentView *view = (ContentView *)contentViewController.view;
 		view.converter.charCountInLine = 80;
 	}
 	if ([launchOptions valueForKey:UIApplicationLaunchOptionsURLKey] == nil) {

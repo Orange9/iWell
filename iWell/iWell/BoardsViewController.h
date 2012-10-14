@@ -19,4 +19,6 @@ enum LIST_TYPE {
 
 @property (strong, nonatomic) NSMutableDictionary *postsViewControllers;
 
+- (void)updateBoards:(NSArray *)boards;
+
 @end

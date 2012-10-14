@@ -11,6 +11,24 @@
 
 @interface BoardsViewController ()
 
+@property (strong, nonatomic) NSMutableArray *boards;
+//	[
+//		{
+//			"name": <string: Board name>,
+//			"read": <Boolean: Board read?>,
+//			"BM": <string: BMs>,
+//			"id": <int: Board id>,
+//			"total": <int: Total post count>,
+//			"currentusers": <int: Current users count>,
+//			"major": <string: major class>,
+//			"minor": <string: minor class>,
+//			"outpost": <string: may outpost>,
+//			"desc": <string: description>
+//		}
+//	]
+
+@property (assign, nonatomic) NSInteger index;
+
 - (void)changeMode;
 - (void)connect;
 
@@ -19,6 +37,8 @@
 @implementation BoardsViewController
 
 @synthesize postsViewControllers = _postsViewControllers;
+@synthesize boards = _boards;
+@synthesize index = _index;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -26,6 +46,8 @@
     if (self) {
         // Custom initialization
 		 self.postsViewControllers = [NSMutableDictionary dictionary];
+		 self.boards = [NSMutableArray array];
+		 self.index = -1;
     }
     return self;
 }
@@ -44,10 +66,10 @@
 
 - (void)viewWillAppear:(BOOL)animated {
 	if (self.type == LIST_FAV) {
-		[self.core listFavBoards];
+		[self.core listFavBoardsForController:self];
 		[self.busyIndicator startAnimating];
 	} else if (self.type == LIST_BOARD) {
-		[self.core listBoards];
+		[self.core listBoardsForController:self];
 		[self.busyIndicator startAnimating];
 	}
 }
@@ -59,7 +81,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return (NSInteger)[self.core boardsCount];
+	return (NSInteger)self.boards.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -71,9 +93,9 @@
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	}
-	NSDictionary *dict = [self.core boardInfoAtIndex:(NSUInteger)indexPath.row];
+	NSDictionary *dict = [self.boards objectAtIndex:(NSUInteger)indexPath.row];
 	cell.textLabel.text = [dict objectForKey:@"name"];
-	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  %@", [dict objectForKey:@"total"], [dict objectForKey:@"bm"]];
+	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  %@", [dict objectForKey:@"total"], [dict objectForKey:@"BM"]];
 	if ([[dict objectForKey:@"read"] boolValue]) {
 		cell.textLabel.font = [UIFont systemFontOfSize:16];
 	} else {
@@ -86,7 +108,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	NSString *boardname = [self.core boardNameAtIndex:(NSUInteger)indexPath.row];
+	self.index = indexPath.row;
+	NSDictionary *dict = [self.boards objectAtIndex:(NSUInteger)indexPath.row];
+	NSString *boardname = [dict valueForKey:@"name"];
 	PostsViewController *postsViewController = [self.postsViewControllers valueForKey:boardname];
 	if (postsViewController == nil) {
 		if (self.isPad) {
@@ -98,9 +122,19 @@
 		postsViewController.isPad = self.isPad;
 		postsViewController.navigationItem.title = boardname;
 		[self.postsViewControllers setValue:postsViewController forKey:boardname];
-		[self.core listPostsOfBoard:boardname];
 	}
 	[self.navigationController pushViewController:postsViewController animated:YES];
+}
+
+- (void)updateBoards:(NSArray *)boards
+{
+	[self.boards setArray:boards];
+	[self.tableView reloadData];
+	if (self.index >= 0) {
+		NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.index inSection:0];
+		[self.tableView selectRowAtIndexPath:indexpath animated:YES scrollPosition:UITableViewScrollPositionNone];
+	}
+	[self.busyIndicator stopAnimating];
 }
 
 - (void)changeMode
@@ -109,13 +143,15 @@
 		self.type = LIST_BOARD;
 		self.navigationItem.title = @"All Boards";
 		self.navigationItem.leftBarButtonItem.title = @"Favorite";
-		[self.core listBoards];
+		[self.core listBoardsForController:self];
 	} else if (self.type == LIST_BOARD)	{
 		self.type = LIST_FAV;
 		self.navigationItem.title = @"Favorite";
 		self.navigationItem.leftBarButtonItem.title = @"All Boards";
-		[self.core listFavBoards];
+		[self.core listFavBoardsForController:self];
 	}
+	self.index = -1;
+	[self.busyIndicator startAnimating];
 }
 
 - (void)connect

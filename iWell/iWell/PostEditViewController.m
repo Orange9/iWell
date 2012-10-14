@@ -45,9 +45,21 @@
 	return UIInterfaceOrientationMaskAll;
 }
 
+- (void)updateQuote:(NSDictionary *)quote
+{
+	self.titleInput.text = [quote valueForKey:@"title"];
+	NSMutableString *string = [NSMutableString stringWithString:@"\n\nSent from "];
+	[string appendString:[UIDevice currentDevice].model];
+	[string appendString:[quote valueForKey:@"content"]];
+	self.contentInput.text = string;
+	self.core.postInput.contentInput.selectedRange = NSMakeRange(0, 0);
+	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self.core.postInput action:@selector(post)];
+	self.core.postInput.navigationItem.rightBarButtonItem = doneButton;
+}
+
 - (void)post
 {
-	[self.core post:self.contentInput.text WithTitle:self.titleInput.text onBoard:self.board WithID:self.postid WithXID:self.xid];
+	[self.core postForController:self];
 	[self.navigationController popViewControllerAnimated:YES];
 }
 

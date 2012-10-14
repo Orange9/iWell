@@ -10,6 +10,42 @@
 
 #import "PostEditViewController.h"
 
+@implementation ContentView
+
+@synthesize string;
+@synthesize converter;
+
+- (void)awakeFromNib
+{
+	self.contentMode = UIViewContentModeRedraw;
+	converter = [StringConverter converter];
+	NSTimer *timer = [NSTimer timerWithTimeInterval:0.5 target:self selector:@selector(blink) userInfo:nil repeats:YES];
+	[[NSRunLoop mainRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
+	[super awakeFromNib];
+}
+
+- (void)drawRect:(CGRect)dirtyRect
+{
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	
+	dirtyRect.origin = self.contentOffset;
+	self.contentSize = [converter draw:self.string InContext:context InRect:&dirtyRect];
+	[super drawRect:dirtyRect];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+	[self setNeedsDisplay];
+}
+
+- (void)blink
+{
+	self.converter.blink = !self.converter.blink;
+	[self setNeedsDisplay];
+}
+
+@end
+
 @interface ContentViewController ()
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 
@@ -24,8 +60,6 @@
 @synthesize swipeRight;
 @synthesize core = _core;
 @synthesize masterPopoverController = _masterPopoverController;
-@synthesize board;
-@synthesize postid;
 @synthesize xid;
 
 #pragma mark - Managing the detail item
@@ -92,14 +126,30 @@
 	self.masterPopoverController = nil;
 }
 
+- (void)updateContent:(NSDictionary *)content
+{
+	self.contentText.string = [content valueForKey:@"content"];
+	self.navigationItem.title = [content valueForKey:@"title"];
+	[self.contentText setContentOffset:CGPointMake(0, 0) animated:NO];
+	[self.contentText setNeedsDisplay];
+	
+	NSInteger pid = [(NSNumber *)[content valueForKey:@"id"] integerValue];
+	if (pid == self.parentController.index) {
+		self.xid = [(NSNumber *)[content valueForKey:@"xid"] integerValue];
+		UIBarButtonItem *replyButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply target:self action:@selector(reply)];
+		self.navigationItem.rightBarButtonItem = replyButton;
+		[self.busyIndicator stopAnimating];
+	}
+}
+
 - (IBAction)handleSwipe:(UISwipeGestureRecognizer *)sender {
 	if (sender.direction == UISwipeGestureRecognizerDirectionLeft) {
 		// older / next post
-		[self.core viewContentOfOlderPost];
+		[self.parentController selectPostWithOffset:-1];
 	}
 	if (sender.direction == UISwipeGestureRecognizerDirectionRight) {
 		// newer / prev post
-		[self.core viewContentOfNewerPost];
+		[self.parentController selectPostWithOffset:1];
 	}
 }
 
@@ -107,10 +157,11 @@
 {
 	[self.navigationController pushViewController:self.core.postInput animated:YES];
 	self.core.postInput.core = self.core;
-	self.core.postInput.board = self.board;
-	self.core.postInput.postid = self.postid;
+	self.core.postInput.board = self.parentController.navigationItem.title;
+	self.core.postInput.postid = self.parentController.index;
 	self.core.postInput.xid = self.xid;
-	[self.core viewQuoteOfPost:self.postid onBoard:self.board WithXID:self.xid];
+	self.core.postInput.navigationItem.rightBarButtonItem = nil;
+	[self.core viewQuoteForController:self.core.postInput];
 }
 
 @end

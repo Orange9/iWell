@@ -20,6 +20,7 @@
 @property (assign, nonatomic) NSUInteger postid;
 @property (assign, nonatomic) NSUInteger xid;
 
+- (void)updateQuote:(NSDictionary *)quote;
 - (void)post;
 
 @end
