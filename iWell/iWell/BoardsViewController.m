@@ -94,9 +94,9 @@
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	}
 	NSDictionary *dict = [self.boards objectAtIndex:(NSUInteger)indexPath.row];
-	cell.textLabel.text = [dict objectForKey:@"name"];
-	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  %@", [dict objectForKey:@"total"], [dict objectForKey:@"BM"]];
-	if ([[dict objectForKey:@"read"] boolValue]) {
+	cell.textLabel.text = [dict valueForKey:@"name"];
+	cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  %@", [dict valueForKey:@"total"], [dict valueForKey:@"BM"]];
+	if ([[dict valueForKey:@"read"] boolValue]) {
 		cell.textLabel.font = [UIFont systemFontOfSize:16];
 	} else {
 		cell.textLabel.font = [UIFont boldSystemFontOfSize:16];

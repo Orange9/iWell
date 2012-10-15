@@ -13,6 +13,7 @@
 
 @class BoardsViewController;
 @class PostsViewController;
+@class DigestsViewController;
 @class ContentViewController;
 @class PostEditViewController;
 
@@ -34,7 +35,9 @@
 - (void)listFavBoardsForController:(BoardsViewController *)controller;
 - (void)listPostsForController:(PostsViewController *)controller;
 - (void)listPostsFrom:(NSInteger)startid To:(NSInteger)endid ForController:(PostsViewController *)controller;
+- (void)listDigestsForController:(DigestsViewController *)controller;
 - (void)viewContentForController:(ContentViewController *)controller;
+- (void)viewDigestForController:(ContentViewController *)controller;
 - (void)viewQuoteForController:(PostEditViewController *)controller;
 - (void)postForController:(PostEditViewController *)controller;
 

@@ -10,6 +10,7 @@
 
 #import "BoardsViewController.h"
 #import "PostsViewController.h"
+#import "DigestsViewController.h"
 #import "ContentViewController.h"
 #import "PostEditViewController.h"
 
@@ -78,37 +79,50 @@
 
 - (void)listBoardsForController:(BoardsViewController *)controller
 {
-	[self.bbsCore listBoardsInRange:NSMakeRange(1, 1000)];
+	[self.bbsCore listBoardsInRange:NSMakeRange(1, 1000) ForController:controller];
 }
 
 - (void)listFavBoardsForController:(BoardsViewController *)controller
 {
-	[self.bbsCore listFavBoardsInRange:NSMakeRange(0, 0)];
+	[self.bbsCore listFavBoardsInRange:NSMakeRange(0, 0) ForController:controller];
 }
 
 - (void)listPostsForController:(PostsViewController *)controller
 {
-	[self.bbsCore listPostsInRange:NSMakeRange(0, 20) onBoard:controller.navigationItem.title];
+	[self.bbsCore listPostsInRange:NSMakeRange(0, 20) OnBoard:controller.navigationItem.title ForController:controller];
 }
 
 - (void)listPostsFrom:(NSInteger)startid To:(NSInteger)endid ForController:(PostsViewController *)controller
 {
-	[self.bbsCore listPostsInRange:NSMakeRange((NSUInteger)startid, (NSUInteger)(endid - startid + 1)) onBoard:controller.navigationItem.title];
+	[self.bbsCore listPostsInRange:NSMakeRange((NSUInteger)startid, (NSUInteger)(endid - startid + 1)) OnBoard:controller.navigationItem.title ForController:controller];
+}
+
+- (void)listDigestsForController:(DigestsViewController *)controller
+{
+	[self.bbsCore listDigestInRange:NSMakeRange(0, 0) OnBoard:controller.board WithRoute:controller.route ForController:controller];
 }
 
 - (void)viewContentForController:(ContentViewController *)controller
 {
-	[self.bbsCore viewContentOfPost:(NSUInteger)controller.parentController.index onBoard:controller.parentController.navigationItem.title];
+	controller.type = CONTENT_SHOW_POST;
+	[self.bbsCore viewContentOfPost:(NSUInteger)controller.postsViewController.index OnBoard:controller.postsViewController.navigationItem.title ForController:controller];
+}
+
+- (void)viewDigestForController:(ContentViewController *)controller
+{
+	controller.type = CONTENT_SHOW_DIGEST;
+	NSString *route = [NSString stringWithFormat:@"%@-%d", controller.digestsViewController.route, controller.digestsViewController.index + 1];
+	[self.bbsCore viewDigestWithRoute:route OnBoard:controller.digestsViewController.board ForController:controller];
 }
 
 - (void)viewQuoteForController:(PostEditViewController *)controller
 {
-	[self.bbsCore viewQuoteOfPost:(NSUInteger)controller.postid onBoard:controller.board WithXID:(NSUInteger)controller.xid];
+	[self.bbsCore viewQuoteOfPost:(NSUInteger)controller.postid OnBoard:controller.board WithXID:(NSUInteger)controller.xid ForController:controller];
 }
 
 - (void)postForController:(PostEditViewController *)controller
 {
-	[self.bbsCore post:controller.contentInput.text WithTitle:controller.titleInput.text onBoard:controller.board WithID:(NSUInteger)controller.postid WithXID:(NSUInteger)controller.xid];
+	[self.bbsCore post:controller.contentInput.text WithTitle:controller.titleInput.text OnBoard:controller.board WithID:(NSUInteger)controller.postid WithXID:(NSUInteger)controller.xid ForController:controller];
 }
 
 #pragma mark - Private Methods
@@ -148,26 +162,44 @@
 	[self performSelectorOnMainThread:@selector(alert:) withObject:content waitUntilDone:YES];
 }
 
-- (void)showContent:(NSDictionary *)content onBoard:(NSString *)board
+- (void)showContent:(NSDictionary *)content OnBoard:(NSString *)board ForController:(id)controller
 {
-	[self.contentOutput performSelectorOnMainThread:@selector(updateContent:) withObject:content waitUntilDone:YES];
+	ContentViewController *c = controller;
+	if (c.type == CONTENT_SHOW_POST && [c.postsViewController.navigationItem.title isEqualToString:board]) {
+		[controller performSelectorOnMainThread:@selector(updateContent:) withObject:content waitUntilDone:YES];
+	}
 }
 
-- (void)showQuote:(NSDictionary *)content onBoard:(NSString *)board withID:(NSUInteger)postid WithXID:(NSUInteger)xid
+- (void)showDigest:(NSDictionary *)content WithRoute:(NSString *)route OnBoard:(NSString *)board ForController:(id)controller
 {
-	[self.postInput performSelectorOnMainThread:@selector(updateQuote:) withObject:content waitUntilDone:YES];
+	ContentViewController *c = controller;
+	NSString *r = [NSString stringWithFormat:@"%@-%d", c.digestsViewController.route, c.digestsViewController.index + 1];
+	if (c.type == CONTENT_SHOW_DIGEST && [r isEqualToString:route] && [c.digestsViewController.board isEqualToString:board]) {
+		[controller performSelectorOnMainThread:@selector(updateDigest:) withObject:content waitUntilDone:YES];
+	}
 }
 
-- (void)showPosts:(NSArray *)posts onBoard:(NSString *)board
+- (void)showQuote:(NSDictionary *)content OnBoard:(NSString *)board WithID:(NSUInteger)postid WithXID:(NSUInteger)xid ForController:(id)controller
 {
-	if ([posts count] == 0) return;
-	PostsViewController *postsViewController = [self.boardsOutput.postsViewControllers valueForKey:board];
-	[postsViewController performSelectorOnMainThread:@selector(updatePosts:) withObject:posts waitUntilDone:YES];
+	PostEditViewController *c = controller;
+	if (c.xid == xid && c.postid == postid && [c.board isEqualToString:board]) {
+		[controller performSelectorOnMainThread:@selector(updateQuote:) withObject:content waitUntilDone:YES];
+	}
 }
 
-- (void)showBoards:(NSArray *)boards
+- (void)showDigests:(NSArray *)digests ForController:(id)controller
 {
-	[self.boardsOutput performSelectorOnMainThread:@selector(updateBoards:) withObject:boards waitUntilDone:YES];
+	[controller performSelectorOnMainThread:@selector(updateDigests:) withObject:digests waitUntilDone:YES];
+}
+
+- (void)showPosts:(NSArray *)posts ForController:(id)controller
+{
+	[controller performSelectorOnMainThread:@selector(updatePosts:) withObject:posts waitUntilDone:YES];
+}
+
+- (void)showBoards:(NSArray *)boards ForController:(id)controller
+{
+	[controller performSelectorOnMainThread:@selector(updateBoards:) withObject:boards waitUntilDone:YES];
 }
 
 @end

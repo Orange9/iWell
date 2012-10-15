@@ -101,7 +101,7 @@
 - (void)keyboardWillShowNotification:(NSNotification*)notification
 {
 	NSDictionary *userInfo = [notification userInfo];
-	NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey];
+	NSValue *keyboardBoundsValue = [userInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
 	CGRect keyboardBounds;
 	[keyboardBoundsValue getValue:&keyboardBounds];
 	CGFloat keyboardHeight;

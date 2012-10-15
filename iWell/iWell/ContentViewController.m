@@ -58,6 +58,9 @@
 @synthesize contentText;
 @synthesize swipeLeft;
 @synthesize swipeRight;
+@synthesize postsViewController = _postsViewController;
+@synthesize digestsViewController = _digestsViewController;
+@synthesize type = _type;
 @synthesize core = _core;
 @synthesize masterPopoverController = _masterPopoverController;
 @synthesize xid;
@@ -134,7 +137,7 @@
 	[self.contentText setNeedsDisplay];
 	
 	NSInteger pid = [(NSNumber *)[content valueForKey:@"id"] integerValue];
-	if (pid == self.parentController.index) {
+	if (pid == self.postsViewController.index) {
 		self.xid = [(NSNumber *)[content valueForKey:@"xid"] integerValue];
 		UIBarButtonItem *replyButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply target:self action:@selector(reply)];
 		self.navigationItem.rightBarButtonItem = replyButton;
@@ -142,14 +145,25 @@
 	}
 }
 
+- (void)updateDigest:(NSDictionary *)content
+{
+	self.contentText.string = [content valueForKey:@"content"];
+	NSDictionary *dict = [content valueForKey:@"item"];
+	self.navigationItem.title = [dict valueForKey:@"title"];
+	[self.contentText setContentOffset:CGPointMake(0, 0) animated:NO];
+	[self.contentText setNeedsDisplay];
+	
+	[self.busyIndicator stopAnimating];
+}
+
 - (IBAction)handleSwipe:(UISwipeGestureRecognizer *)sender {
 	if (sender.direction == UISwipeGestureRecognizerDirectionLeft) {
 		// older / next post
-		[self.parentController selectPostWithOffset:-1];
+		[self.postsViewController selectPostWithOffset:-1];
 	}
 	if (sender.direction == UISwipeGestureRecognizerDirectionRight) {
 		// newer / prev post
-		[self.parentController selectPostWithOffset:1];
+		[self.postsViewController selectPostWithOffset:1];
 	}
 }
 
@@ -157,8 +171,8 @@
 {
 	[self.navigationController pushViewController:self.core.postInput animated:YES];
 	self.core.postInput.core = self.core;
-	self.core.postInput.board = self.parentController.navigationItem.title;
-	self.core.postInput.postid = self.parentController.index;
+	self.core.postInput.board = self.postsViewController.navigationItem.title;
+	self.core.postInput.postid = self.postsViewController.index;
 	self.core.postInput.xid = self.xid;
 	self.core.postInput.navigationItem.rightBarButtonItem = nil;
 	[self.core viewQuoteForController:self.core.postInput];

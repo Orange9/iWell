@@ -17,8 +17,8 @@
 @property (retain, nonatomic) Core *core;
 
 @property (strong, nonatomic) NSString *board;
-@property (assign, nonatomic) NSUInteger postid;
-@property (assign, nonatomic) NSUInteger xid;
+@property (assign, nonatomic) NSInteger postid;
+@property (assign, nonatomic) NSInteger xid;
 
 - (void)updateQuote:(NSDictionary *)quote;
 - (void)post;

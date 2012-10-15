@@ -81,7 +81,7 @@ static NSString *methodString[] = { @"GET", @"POST" };
 	NSEnumerator *e = [data keyEnumerator];
 	if (data != nil) {
 		for (NSString *key in e) {
-			NSString *value = [NSString stringWithFormat:@"%@", [data objectForKey:key]];
+			NSString *value = [NSString stringWithFormat:@"%@", [data valueForKey:key]];
 			[dataString appendFormat:@"%@=%@&", [self encode:key], [self encode:value]];
 		}
 	}

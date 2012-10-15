@@ -8,8 +8,18 @@
 
 #import "BBSCore.h"
 
-static NSString *reqPath[] = { @"/board/list", @"/favboard/list", @"/board/post_list", @"/post/view", @"/post/quote", @"/post/new" };
+static NSString *reqPath[] = {
+	@"/board/list",
+	@"/favboard/list",
+	@"/board/post_list",
+	@"/digest/list",
+	@"/post/view",
+	@"/digest/view",
+	@"/post/quote",
+	@"/post/new"
+};
 static NSString *reqString = @"iWell_Req";
+static NSString *controllerString = @"iWell_Controller";
 
 @interface BBSCore ()
 @property (strong, nonatomic) SBJsonParser *parser;
@@ -73,11 +83,6 @@ static NSString *reqString = @"iWell_Req";
 {
 	if (stage == BBS_OAUTH_SESSION || stage == BBS_OAUTH_VERIFY) {
 		self.stage = stage;
-		// [receiver showContent:@"\e[41mabcdefghijklmnopqrstuvwxyz\nABCDEGHIJK"];
-		//	[receiver showContent:@"\e[30mabcdefgh\e[31mabcdefgh\e[32mabcdefgh\e[33mabcdefgh\e[34mabcdefgh\e[35mabcdefgh\e[36mabcdefgh\e[37mabcdefgh\e[30;1mabcdefgh\e[31;1mabcdefgh\e[32;1mabcdefgh\e[33;1mabcdefgh\e[34;1mabcdefgh\e[35;1mabcdefgh\e[36;1mabcdefgh\e[37;1mabcdefgh\e[mXXXXXX\e[40mabcdefgh\e[41mabcdefgh\e[42mabcdefgh\e[43mabcdefgh\e[44mabcdefgh\e[45mabcdefgh\e[46mabcdefgh\e[47mabcdefgh\e[40;1mabcdefgh\e[41;1mabcdefgh\e[42;1mabcdefgh\e[43;1mabcdefgh\e[44;1mabcdefgh\e[45;1mabcdefgh\e[46;1mabcdefgh\e[47;1mabcdefgh\e[mXXXXXX\e[31;42mabcdefgh\e[30;42mabcdefgh"];
-		// [receiver showContent:@"MMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHHMMMMMHHHHH\n国国国国国同同同同同国国国国国同同同同同国国国国国同同同同同国国国国国同同同同同"];
-		// [receiver printContent:@"abcdefghijABCDEFGHIJklmnopqrstKLMNOPQRST1234567890"];
-		// [receiver showContent:@"\e[31m红RED\e[32mGREEN绿\e[m黑\n\e[41m红底\e[42m绿底\e[31m红字\e[1m亮\e[m"];
 		[NSThread detachNewThreadSelector:@selector(run) toTarget:self withObject:nil];
 	}
 }
@@ -87,11 +92,12 @@ static NSString *reqString = @"iWell_Req";
 	self.stage = BBS_IDLE;
 }
 
-- (void)listBoardsInRange:(NSRange)range
+- (void)listBoardsInRange:(NSRange)range ForController:(id)controller
 {
 	if (self.stage != BBS_ONLINE) return;
 	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
 	[data setValue:[NSNumber numberWithUnsignedInteger:BBS_BOARDS_LIST] forKey:reqString];
+	[data setValue:controller forKey:controllerString];
 	[data setValue:self.sessionToken forKey:@"session"];
 	if (range.location > 0) {
 		[data setValue:[NSNumber numberWithUnsignedInteger:range.location] forKey:@"start"]; //optional
@@ -106,11 +112,12 @@ static NSString *reqString = @"iWell_Req";
 	[self.condition unlock];
 }
 
-- (void)listFavBoardsInRange:(NSRange)range
+- (void)listFavBoardsInRange:(NSRange)range ForController:(id)controller
 {
 	if (self.stage != BBS_ONLINE) return;
 	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
 	[data setValue:[NSNumber numberWithUnsignedInteger:BBS_FAVBOARDS_LIST] forKey:reqString];
+	[data setValue:controller forKey:controllerString];
 	[data setValue:self.sessionToken forKey:@"session"];
 	if (range.location > 0) {
 		[data setValue:[NSNumber numberWithUnsignedInteger:range.location] forKey:@"start"]; //optional
@@ -125,11 +132,12 @@ static NSString *reqString = @"iWell_Req";
 	[self.condition unlock];
 }
 
-- (void)listPostsInRange:(NSRange)range onBoard:(NSString *)board
+- (void)listPostsInRange:(NSRange)range OnBoard:(NSString *)board ForController:(id)controller
 {
 	if (self.stage != BBS_ONLINE) return;
 	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
 	[data setValue:[NSNumber numberWithUnsignedInteger:BBS_POSTS_LIST] forKey:reqString];
+	[data setValue:controller forKey:controllerString];
 	[data setValue:self.sessionToken forKey:@"session"];
 	[data setValue:board forKey:@"name"];
 	[data setValue:@"normal" forKey:@"mode"]; //optional, normal/digest/mark/deleted/junk
@@ -146,11 +154,36 @@ static NSString *reqString = @"iWell_Req";
 	[self.condition unlock];
 }
 
-- (void)viewContentOfPost:(NSUInteger)postid onBoard:(NSString *)board
+- (void)listDigestInRange:(NSRange)range OnBoard:(NSString *)board WithRoute:(NSString *)route ForController:(id)controller
+{
+	
+	if (self.stage != BBS_ONLINE) return;
+	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
+	[data setValue:[NSNumber numberWithUnsignedInteger:BBS_DIGEST_LIST] forKey:reqString];
+	[data setValue:controller forKey:controllerString];
+	[data setValue:self.sessionToken forKey:@"session"];
+	if (board != nil) {
+		[data setValue:board forKey:@"board"];
+	}
+	[data setValue:route forKey:@"route"];
+	if (range.location > 0) {
+		[data setValue:[NSNumber numberWithUnsignedInteger:range.location] forKey:@"start"]; //optional
+	}
+	if (range.length > 0) {
+		[data setValue:[NSNumber numberWithUnsignedInteger:range.location + range.length] forKey:@"end"]; //optional
+	}
+	[self.condition lock];
+	[self.reqQueue addObject:data];
+	[self.condition signal];
+	[self.condition unlock];
+}
+
+- (void)viewContentOfPost:(NSUInteger)postid OnBoard:(NSString *)board ForController:(id)controller
 {
 	if (self.stage != BBS_ONLINE) return;
 	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
 	[data setValue:[NSNumber numberWithUnsignedInteger:BBS_CONTENT_VIEW] forKey:reqString];
+	[data setValue:controller forKey:controllerString];
 	[data setValue:self.sessionToken forKey:@"session"];
 	[data setValue:[NSNumber numberWithUnsignedInteger:postid] forKey:@"id"];
 	[data setValue:board forKey:@"board"];
@@ -160,11 +193,27 @@ static NSString *reqString = @"iWell_Req";
 	[self.condition unlock];
 }
 
-- (void)viewQuoteOfPost:(NSUInteger)postid onBoard:(NSString *)board WithXID:(NSUInteger)xid
+- (void)viewDigestWithRoute:(NSString *)route OnBoard:(NSString *)board ForController:(id)controller
+{
+	if (self.stage != BBS_ONLINE) return;
+	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
+	[data setValue:[NSNumber numberWithUnsignedInteger:BBS_DIGEST_VIEW] forKey:reqString];
+	[data setValue:controller forKey:controllerString];
+	[data setValue:self.sessionToken forKey:@"session"];
+	[data setValue:route forKey:@"route"];
+	[data setValue:board forKey:@"board"];
+	[self.condition lock];
+	[self.reqQueue addObject:data];
+	[self.condition signal];
+	[self.condition unlock];
+}
+
+- (void)viewQuoteOfPost:(NSUInteger)postid OnBoard:(NSString *)board WithXID:(NSUInteger)xid ForController:(id)controller
 {
 	if (self.stage != BBS_ONLINE) return;
 	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
 	[data setValue:[NSNumber numberWithUnsignedInteger:BBS_QUOTE_VIEW] forKey:reqString];
+	[data setValue:controller forKey:controllerString];
 	[data setValue:self.sessionToken forKey:@"session"];
 	[data setValue:[NSNumber numberWithUnsignedInteger:postid] forKey:@"id"];
 	[data setValue:[NSNumber numberWithUnsignedInteger:xid] forKey:@"xid"];
@@ -175,11 +224,12 @@ static NSString *reqString = @"iWell_Req";
 	[self.condition unlock];
 }
 
-- (void)post:(NSString *)content WithTitle:(NSString *)title onBoard:(NSString *)board WithID:(NSUInteger)postid WithXID:(NSUInteger)xid
+- (void)post:(NSString *)content WithTitle:(NSString *)title OnBoard:(NSString *)board WithID:(NSUInteger)postid WithXID:(NSUInteger)xid ForController:(id)controller
 {
 	if (self.stage != BBS_ONLINE) return;
 	NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
 	[data setValue:[NSNumber numberWithUnsignedInteger:BBS_POST] forKey:reqString];
+	[data setValue:controller forKey:controllerString];
 	[data setValue:self.sessionToken forKey:@"session"];
 	if (postid > 0) {
 		[data setValue:[NSNumber numberWithUnsignedInteger:postid] forKey:@"re_id"];
@@ -250,18 +300,24 @@ static NSString *reqString = @"iWell_Req";
 						NSMutableDictionary *packedData = [self.reqQueue objectAtIndex:0];
 						NSNumber *reqNumber = [packedData valueForKey:reqString];
 						[packedData removeObjectForKey:reqString];
+						id controller = [packedData valueForKey:controllerString];
+						[packedData removeObjectForKey:controllerString];
 						enum bbs_req_t req = [reqNumber unsignedIntegerValue];
 						NSArray *array;
 						if (req == BBS_BOARDS_LIST || req == BBS_FAVBOARDS_LIST) {
-							array = [NSArray arrayWithObject:reqNumber];
+							array = [NSArray arrayWithObjects:reqNumber, controller, nil];
 						} else if (req == BBS_POSTS_LIST) {
-							array = [NSArray arrayWithObjects:reqNumber, [packedData valueForKey:@"name"], nil];
+							array = [NSArray arrayWithObjects:reqNumber, controller, nil];
+						} else if (req == BBS_DIGEST_LIST) {
+							array = [NSArray arrayWithObjects:reqNumber, controller, nil];
 						} else if (req == BBS_CONTENT_VIEW) {
-							array = [NSArray arrayWithObjects:reqNumber, [packedData valueForKey:@"board"], [packedData valueForKey:@"id"], nil];
+							array = [NSArray arrayWithObjects:reqNumber, controller, [packedData valueForKey:@"board"], [packedData valueForKey:@"id"], nil];
+						} else if (req == BBS_DIGEST_VIEW) {
+							array = [NSArray arrayWithObjects:reqNumber, controller, [packedData valueForKey:@"route"], [packedData valueForKey:@"board"], nil];
 						} else if (req == BBS_QUOTE_VIEW) {
-							array = [NSArray arrayWithObjects:reqNumber, [packedData valueForKey:@"board"], [packedData valueForKey:@"id"], [packedData valueForKey:@"xid"], nil];
+							array = [NSArray arrayWithObjects:reqNumber, controller, [packedData valueForKey:@"board"], [packedData valueForKey:@"id"], [packedData valueForKey:@"xid"], nil];
 						} else if (req == BBS_POST) {
-							array = [NSArray arrayWithObjects:reqNumber, [packedData valueForKey:@"board"], [packedData valueForKey:@"id"], [packedData valueForKey:@"xid"], nil];
+							array = [NSArray arrayWithObjects:reqNumber, controller, [packedData valueForKey:@"board"], [packedData valueForKey:@"id"], [packedData valueForKey:@"xid"], nil];
 						} else break;
 						NSNumber *index;
 						if (req != BBS_POST) {
@@ -303,9 +359,9 @@ static NSString *reqString = @"iWell_Req";
 				// {"access_token": <string: Token>, "token_type": <string: Token type>}
 				id dict = [self.parser objectWithData:data];
 				if ([dict isKindOfClass:[NSDictionary class]]) {
-					NSString *value = [(NSDictionary *)dict objectForKey:@"token_type"];
+					NSString *value = [(NSDictionary *)dict valueForKey:@"token_type"];
 					if (value != nil && [value isEqualToString:@"session"]) {
-						value = [(NSDictionary *)dict objectForKey:@"access_token"];
+						value = [(NSDictionary *)dict valueForKey:@"access_token"];
 						if (value != nil) {
 							self.sessionToken = value;
 							self.stage = BBS_ONLINE;
@@ -324,7 +380,7 @@ static NSString *reqString = @"iWell_Req";
 				// {"status": <string: Status>}
 				id dict = [self.parser objectWithData:data];
 				if ([dict isKindOfClass:[NSDictionary class]]) {
-					NSString *value = [(NSDictionary *)dict objectForKey:@"status"];
+					NSString *value = [(NSDictionary *)dict valueForKey:@"status"];
 					if (value != nil && [value isEqualToString:@"ok"]) {
 						self.stage = BBS_ONLINE;
 						//	[self.delegate printContent:@"READY"];
@@ -340,6 +396,7 @@ static NSString *reqString = @"iWell_Req";
 			{
 				NSArray *reqInfo = [self.reqMap objectForKey:index];
 				NSNumber *reqNumber = [reqInfo objectAtIndex:0];
+				id controller = [reqInfo objectAtIndex:1];
 				enum bbs_req_t req = [reqNumber unsignedIntegerValue];
 				[self.condition lock];
 				[self.reqMap removeObjectForKey:index];
@@ -350,7 +407,7 @@ static NSString *reqString = @"iWell_Req";
 						// [{"name": <string: Board name>, "read": <Boolean: Board read?>, "BM": <string: BMs>, "id": <int: Board id>, "total": <int: Total post count>, "currentusers": <int: Current users count>},{...}...]
 						id array = [self.parser objectWithData:data];
 						if ([array isKindOfClass:[NSArray class]]) {
-							[self.delegate showBoards:array];
+							[self.delegate showBoards:array ForController:controller];
 							return;
 						}
 						[self.delegate printContent:@"DATA CORRUPTED"];
@@ -363,10 +420,10 @@ static NSString *reqString = @"iWell_Req";
 						if ([array isKindOfClass:[NSArray class]]) {
 							NSMutableArray *newArray = [NSMutableArray array];
 							for (NSDictionary *dict in array) {
-								NSDictionary *value = [dict objectForKey:@"binfo"];
+								NSDictionary *value = [dict valueForKey:@"binfo"];
 								[newArray addObject:value];
 							}
-							[self.delegate showBoards:newArray];
+							[self.delegate showBoards:newArray ForController:controller];
 							return;
 						}
 						[self.delegate printContent:@"DATA CORRUPTED"];
@@ -375,15 +432,33 @@ static NSString *reqString = @"iWell_Req";
 					case BBS_POSTS_LIST:
 					{
 						// [{"posttime": <time: post time>, "attachflag": <int: unknown>, "read": <Boolean: Post read>, "title": <string: Post title>, "attachment": <int: Attachment count>, "owner": <string: Poster userid>, "id": <int: Post id>, "xid": <int: unique post ID>}, {...}...]
-						NSString *board = [reqInfo objectAtIndex:1];
 						if ([data length] == 0) {
-							[self.delegate showPosts:[NSArray array] onBoard:board];
+							[self.delegate showPosts:[NSArray array] ForController:controller];
 							return;
 						}
 						id array = [self.parser objectWithData:data];
 						if ([array isKindOfClass:[NSArray class]]) {
-							[self.delegate showPosts:array onBoard:board];
+							[self.delegate showPosts:array ForController:controller];
 							return;
+						}
+						[self.delegate printContent:@"DATA CORRUPTED"];
+						return;
+					}
+					case BBS_DIGEST_LIST:
+					{
+						// {'parent': <DigestItem: information of the directory>, 'count': <int: number of items returned>, 'items': [{'mtitle': <string: menu title when listing children of this item>, 'title': <string: title of this item>, 'attach': <int: attachment position or attachment flag, with attachment <-> != 0>, 'mtime': <int: modification time>, 'type': <string: item type. can be file/dir/link/other>, 'id': <int: item index, start from 1>, (these items only appear if type == link) 'host': <string: link host>, 'post': <int: link port>}, {...}...]}
+						if ([data length] == 0) {
+							[self.delegate showDigests:[NSArray array] ForController:controller];
+							return;
+						}
+						
+						id dict = [self.parser objectWithData:data];
+						if ([dict isKindOfClass:[NSDictionary class]]) {
+							id array = [dict valueForKey:@"items"];
+							if ([array isKindOfClass:[NSArray class]]) {
+								[self.delegate showDigests:array ForController:controller];
+								return;
+							}
 						}
 						[self.delegate printContent:@"DATA CORRUPTED"];
 						return;
@@ -391,10 +466,23 @@ static NSString *reqString = @"iWell_Req";
 					case BBS_CONTENT_VIEW:
 					{
 						// {"picattach": [{"name": <string: Attachment filename>, "offset:": <int: Attachment offset in post>}, {...}...], "title": <string: Post title>, "content": <string: Post content>, "otherattach": [{...}...], "owner": <string: Poster>, "id": <int: Post ID>, "xid": <int: unique post ID>}
-						NSString *board = [reqInfo objectAtIndex:1];
+						NSString *board = [reqInfo objectAtIndex:2];
 						id dict = [self.parser objectWithData:data];
 						if ([dict isKindOfClass:[NSDictionary class]]) {
-							[self.delegate showContent:dict onBoard:board];
+							[self.delegate showContent:dict OnBoard:board ForController:controller];
+							return;
+						}
+						[self.delegate printContent:@"DATA CORRUPTED"];
+						return;
+					}
+					case BBS_DIGEST_VIEW:
+					{
+						// {'item': <DigestItem: information of the post item>, 'content': <*PostContent: content of the post>, 'attachlink': <string: URL of the page showing attachments>}
+						NSString *route = [reqInfo objectAtIndex:2];
+						NSString *board = [reqInfo objectAtIndex:3];
+						id dict = [self.parser objectWithData:data];
+						if ([dict isKindOfClass:[NSDictionary class]]) {
+							[self.delegate showDigest:dict WithRoute:route OnBoard:board ForController:controller];
 							return;
 						}
 						[self.delegate printContent:@"DATA CORRUPTED"];
@@ -403,12 +491,12 @@ static NSString *reqString = @"iWell_Req";
 					case BBS_QUOTE_VIEW:
 					{
 						// {"content": <string: Post content encoded in Base64>, "name": <string: Attachment name>}
-						NSString *board = [reqInfo objectAtIndex:1];
-						NSNumber *postid = [reqInfo objectAtIndex:2];
-						NSNumber *xid = [reqInfo objectAtIndex:3];
+						NSString *board = [reqInfo objectAtIndex:2];
+						NSNumber *postid = [reqInfo objectAtIndex:3];
+						NSNumber *xid = [reqInfo objectAtIndex:4];
 						id dict = [self.parser objectWithData:data];
 						if ([dict isKindOfClass:[NSDictionary class]]) {
-							[self.delegate showQuote:dict onBoard:board withID:[postid unsignedIntegerValue] WithXID:[xid unsignedIntegerValue]];
+							[self.delegate showQuote:dict OnBoard:board WithID:[postid unsignedIntegerValue] WithXID:[xid unsignedIntegerValue] ForController:controller];
 							return;
 						}
 						[self.delegate printContent:@"DATA CORRUPTED"];

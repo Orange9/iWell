@@ -39,7 +39,7 @@
 
 @implementation PostsViewController
 
-@synthesize digestViewController = _digestViewController;
+@synthesize digestsViewController = _digestViewController;
 @synthesize posts = _posts;
 @synthesize index = _index;
 @synthesize offset = _offset;
@@ -112,7 +112,7 @@
 		NSDictionary *dict = [self.posts objectAtIndex:(NSUInteger)indexPath.row];
 		cell.textLabel.text = [dict valueForKey:@"title"];
 		cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  %@", [dict valueForKey:@"id"], [dict valueForKey:@"owner"]];
-		if ([[dict objectForKey:@"read"] boolValue]) {
+		if ([[dict valueForKey:@"read"] boolValue]) {
 			cell.textLabel.font = [UIFont systemFontOfSize:16];
 		} else {
 			cell.textLabel.font = [UIFont boldSystemFontOfSize:16];
@@ -148,17 +148,19 @@
 		// digest
 		self.index = -1;
 		NSString *boardname = self.navigationItem.title;
-		if (self.digestViewController == nil) {
+		if (self.digestsViewController == nil) {
 			if (self.isPad) {
-				self.digestViewController = [[DigestsViewController alloc] initWithNibName:@"ListViewController_iPad" bundle:nil];
+				self.digestsViewController = [[DigestsViewController alloc] initWithNibName:@"ListViewController_iPad" bundle:nil];
 			} else {
-				self.digestViewController = [[DigestsViewController alloc] initWithNibName:@"ListViewController_iPhone" bundle:nil];
+				self.digestsViewController = [[DigestsViewController alloc] initWithNibName:@"ListViewController_iPhone" bundle:nil];
 			}
-			self.digestViewController.core = self.core;
-			self.digestViewController.isPad = self.isPad;
-			self.digestViewController.navigationItem.title = boardname;
+			self.digestsViewController.core = self.core;
+			self.digestsViewController.isPad = self.isPad;
+			self.digestsViewController.board = boardname;
+			self.digestsViewController.route = @"x";
+			self.digestsViewController.navigationItem.title = boardname;
 		}
-		[self.navigationController pushViewController:self.digestViewController animated:YES];
+		[self.navigationController pushViewController:self.digestsViewController animated:YES];
 	} else if (indexPath.section == 2) {
 		// normal post title
 		if (!self.isPad) {
@@ -169,7 +171,7 @@
 				[self.core.contentOutput.navigationController popViewControllerAnimated:YES];
 			}
 		}
-		self.core.contentOutput.parentController = self;
+		self.core.contentOutput.postsViewController = self;
 		NSDictionary *dict = [self.posts objectAtIndex:(NSUInteger)indexPath.row];
 		NSInteger pid = [[dict valueForKey:@"id"] integerValue];
 		self.index = pid;

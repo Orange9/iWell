@@ -12,7 +12,7 @@
 
 @interface PostsViewController : ListViewController
 
-@property (strong, nonatomic) DigestsViewController *digestViewController;
+@property (strong, nonatomic) DigestsViewController *digestsViewController;
 
 @property (assign, nonatomic) NSInteger index;
 
