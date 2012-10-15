@@ -79,15 +79,13 @@
 					</object>
 					<object class="IBUIActivityIndicatorView" id="912216043">
 						<reference key="NSNextResponder" ref="364513715"/>
-						<int key="NSvFlags">292</int>
+						<int key="NSvFlags">-2147483347</int>
 						<string key="NSFrame">{{366, 493}, {37, 37}}</string>
 						<reference key="NSSuperview" ref="364513715"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<bool key="IBUIHidesWhenStopped">NO</bool>
 						<int key="IBUIStyle">0</int>
 						<object class="NSColor" key="IBUIColor">
 							<int key="NSColorSpace">3</int>
