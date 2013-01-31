@@ -182,10 +182,16 @@
 		NSInteger startid = self.offset - (NSInteger)self.posts.count + 1;
 		[dict setValue:[NSNumber numberWithBool:YES] forKey:@"read"];
 		if (pid - startid < 10) {
-			[self.core listPostsFrom:startid - 10 To:startid ForController:self];
+			[self.core listPostsFrom:startid - 20 To:startid ForController:self];
 		}
 		if (endid - pid < 10) {
-			[self.core listPostsFrom:endid To:endid + 10 ForController:self];
+			[self.core listPostsFrom:endid To:endid + 20 ForController:self];
+		}
+		[self.tableView reloadData];
+		if (self.index > 0) {
+			NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:self.offset - self.index inSection:2];
+			[self.tableView selectRowAtIndexPath:newIndexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+			[self.tableView scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
 		}
 	} else if (indexPath.section == 1) {
 		// new posts
@@ -217,10 +223,16 @@
 	NSDictionary *dict = [self.posts objectAtIndex:(NSUInteger)(self.offset - index)];
 	[dict setValue:[NSNumber numberWithBool:YES] forKey:@"read"];
 	if (index - startid < 10) {
-		[self.core listPostsFrom:startid - 10 To:startid ForController:self];
+		[self.core listPostsFrom:startid - 20 To:startid ForController:self];
 	}
 	if (endid - index < 10) {
-		[self.core listPostsFrom:endid To:endid + 10 ForController:self];
+		[self.core listPostsFrom:endid To:endid + 20 ForController:self];
+	}
+	[self.tableView reloadData];
+	if (self.index > 0) {
+		NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:self.offset - self.index inSection:2];
+		[self.tableView selectRowAtIndexPath:newIndexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+		[self.tableView scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
 	}
 }
 
@@ -279,7 +291,9 @@
 	}
 	[self.tableView reloadData];
 	if (self.index > 0) {
-		[self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:self.offset - self.index inSection:2] animated:YES scrollPosition:UITableViewScrollPositionNone];
+		NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:self.offset - self.index inSection:2];
+		[self.tableView selectRowAtIndexPath:newIndexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+		[self.tableView scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
 	}
 	[self.busyIndicator stopAnimating];
 }

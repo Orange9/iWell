@@ -219,8 +219,8 @@
 				B43D75351574F14000F584A4 /* ListViewController_iPhone.xib */,
 				B43D752D1574F14000F584A4 /* ContentViewController_iPad.xib */,
 				B43D752F1574F14000F584A4 /* ContentViewController_iPhone.xib */,
-				B4FF4D141577C8C70080C918 /* PostEditViewController_iPhone.xib */,
 				B4FF4D1A1577EAA70080C918 /* PostEditViewController_iPad.xib */,
+				B4FF4D141577C8C70080C918 /* PostEditViewController_iPhone.xib */,
 				B43D74F01574F09200F584A4 /* Utils */,
 				B43D74E61574F07A00F584A4 /* Core */,
 				B43D74BE1574F02600F584A4 /* Supporting Files */,
@@ -519,6 +519,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -561,6 +562,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PROVISIONING_PROFILE = "FD4A2CEE-7BB2-4FB4-B011-A9C8296DD60E";
 				SDKROOT = iphoneos;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Debug;
 		};
@@ -568,6 +570,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -606,6 +609,7 @@
 				PROVISIONING_PROFILE = "FD4A2CEE-7BB2-4FB4-B011-A9C8296DD60E";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv7 armv7s";
 			};
 			name = Release;
 		};

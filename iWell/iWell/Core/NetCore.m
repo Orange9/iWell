@@ -139,6 +139,10 @@ static NSString *methodString[] = { @"GET", @"POST" };
 
 - (void)connection:(Connection *)connection didReceiveResponse:(NSURLResponse *)response
 {
+	long long len = [response expectedContentLength];
+	NSURL *url = [response URL];
+	NSMutableData *recvData = [self.recvData objectForKey:connection.index];
+	[recvData setLength:0];
 	//	[receiver recv:[NSString stringWithFormat:@"Receive response %@", [[response URL] absoluteString]]];
 }
 

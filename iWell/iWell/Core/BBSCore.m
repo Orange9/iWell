@@ -347,9 +347,9 @@ static NSString *controllerString = @"iWell_Controller";
 {
 	if (data == nil) {
 		// something bad happens
-		NSString *string = [NSString stringWithFormat:@"%d: %@", error.code, error.localizedDescription];
-		[self.delegate printContent:string];
 		if (error.code != NSURLErrorTimedOut) {
+			NSString *string = [NSString stringWithFormat:@"%d: %@", error.code, error.localizedDescription];
+			[self.delegate printContent:string];
 			self.stage = BBS_IDLE;
 		}
 	} else {

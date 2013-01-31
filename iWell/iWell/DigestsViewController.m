@@ -129,8 +129,9 @@
 	[self.digests setArray:digests];
 	[self.tableView reloadData];
 	if (self.index >= 0) {
-		NSIndexPath *indexpath = [NSIndexPath indexPathForRow:self.index inSection:0];
-		[self.tableView selectRowAtIndexPath:indexpath animated:YES scrollPosition:UITableViewScrollPositionNone];
+		NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.index inSection:0];
+		[self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+		[self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
 	}
 	[self.busyIndicator stopAnimating];
 }
