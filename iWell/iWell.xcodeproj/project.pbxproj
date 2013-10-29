@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		A256DCCE17CDC8EB00267C49 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A256DCCD17CDC8EB00267C49 /* Default-568h@2x.png */; };
+		B414BA0D18202E74007F54A6 /* icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = B414BA0A18202E74007F54A6 /* icon-76.png */; };
+		B414BA0E18202E74007F54A6 /* icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B414BA0B18202E74007F54A6 /* icon-60@2x.png */; };
+		B414BA0F18202E74007F54A6 /* icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B414BA0C18202E74007F54A6 /* icon-76@2x.png */; };
 		B42FE3B01578A7A200E23B89 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = B42FE3AF1578A7A200E23B89 /* Icon-72.png */; };
 		B42FE3B21578A7AF00E23B89 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = B42FE3B11578A7AF00E23B89 /* Icon.png */; };
 		B42FE3B41578A7B300E23B89 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B42FE3B31578A7B300E23B89 /* Icon@2x.png */; };
@@ -66,6 +69,9 @@
 
 /* Begin PBXFileReference section */
 		A256DCCD17CDC8EB00267C49 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		B414BA0A18202E74007F54A6 /* icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-76.png"; sourceTree = "<group>"; };
+		B414BA0B18202E74007F54A6 /* icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-60@2x.png"; sourceTree = "<group>"; };
+		B414BA0C18202E74007F54A6 /* icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-76@2x.png"; sourceTree = "<group>"; };
 		B42FE3AF1578A7A200E23B89 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		B42FE3B11578A7AF00E23B89 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		B42FE3B31578A7B300E23B89 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
@@ -168,6 +174,9 @@
 		B43D74A81574F02300F584A4 = {
 			isa = PBXGroup;
 			children = (
+				B414BA0A18202E74007F54A6 /* icon-76.png */,
+				B414BA0B18202E74007F54A6 /* icon-60@2x.png */,
+				B414BA0C18202E74007F54A6 /* icon-76@2x.png */,
 				A256DCCD17CDC8EB00267C49 /* Default-568h@2x.png */,
 				B42FE3B51578A80000E23B89 /* Icon-72@2x.png */,
 				B42FE3B31578A7B300E23B89 /* Icon@2x.png */,
@@ -344,7 +353,12 @@
 		B43D74AA1574F02300F584A4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0500;
+				TargetAttributes = {
+					B43D74B21574F02500F584A4 = {
+						DevelopmentTeam = RAN9NGQ5Z7;
+					};
+				};
 			};
 			buildConfigurationList = B43D74AD1574F02300F584A4 /* Build configuration list for PBXProject "iWell" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -369,6 +383,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B414BA0D18202E74007F54A6 /* icon-76.png in Resources */,
 				B43D74C21574F02600F584A4 /* InfoPlist.strings in Resources */,
 				B43D75371574F14000F584A4 /* ContentViewController_iPad.xib in Resources */,
 				B43D75381574F14000F584A4 /* ContentViewController_iPhone.xib in Resources */,
@@ -377,8 +392,10 @@
 				B4FF4D161577C8C80080C918 /* PostEditViewController_iPhone.xib in Resources */,
 				B4FF4D1C1577EAA70080C918 /* PostEditViewController_iPad.xib in Resources */,
 				B42FE3B01578A7A200E23B89 /* Icon-72.png in Resources */,
+				B414BA0F18202E74007F54A6 /* icon-76@2x.png in Resources */,
 				B42FE3B21578A7AF00E23B89 /* Icon.png in Resources */,
 				B42FE3B41578A7B300E23B89 /* Icon@2x.png in Resources */,
+				B414BA0E18202E74007F54A6 /* icon-60@2x.png in Resources */,
 				B42FE3B61578A80000E23B89 /* Icon-72@2x.png in Resources */,
 				A256DCCE17CDC8EB00267C49 /* Default-568h@2x.png in Resources */,
 			);
@@ -523,7 +540,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -564,6 +580,7 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "FD4A2CEE-7BB2-4FB4-B011-A9C8296DD60E";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv7 armv7s";
@@ -574,7 +591,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_IMPLICIT_SIGN_CONVERSION = YES;
@@ -620,12 +636,15 @@
 		B43D74E11574F02A00F584A4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iWell/iWell-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "iWell/iWell-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -634,12 +653,15 @@
 		B43D74E21574F02A00F584A4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iWell/iWell-Prefix.pch";
 				GCC_THUMB_SUPPORT = NO;
 				INFOPLIST_FILE = "iWell/iWell-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
